@@ -53,9 +53,8 @@
 
     `python setup.py pytest`
 
-9. 
-
 ## Sources
 
 1. [How to create a Python Library](https://medium.com/analytics-vidhya/how-to-create-a-python-library-7d5aea80cc3f)
 2. [venv](https://docs.python.org/3/library/venv.html)
+3. [Import or Install](https://stackoverflow.com/questions/4527554/check-if-module-exists-if-not-install-it)
