@@ -52,6 +52,23 @@
 8. Run Tests
 
     `python setup.py pytest`
+9. Build Library
+    Now that all the content is there, we want to build our library. Make sure your present working directory is /path/to/mypythonlibrary (so the root folder of your project). In your command prompt, run:
+
+   > python setup.py bdist_wheel
+
+   Your wheel file is stored in the “dist” folder that is now created. You can install your library by using:
+
+   > pip install /path/to/wheelfile.whl
+
+   Note that you could also publish your library to an internal file system on intranet at your workplace, or to the official PyPI repository and install it from there.
+  
+   Once you have installed your Python library, you can import it using:
+
+   ```python
+   import mypythonlib
+   from mypythonlib import myfunctions
+   ```
 
 ## Sources
 
