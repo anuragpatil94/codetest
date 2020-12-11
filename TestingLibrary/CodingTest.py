@@ -1,3 +1,9 @@
+"""
+TODO: Linked list Type Class
+TODO: Tree Type Class
+"""
+
+
 class IOObject:
     def __init__(self, value, type, default, options={}):
         self.value = value
@@ -11,6 +17,19 @@ class CodingTest:
         self.tests = tests
 
     def _containerize(self, ios: list) -> list:
+        knownTypes = {
+            "int": int,
+            "float": float,
+            "complex": complex,
+            "list": list,
+            "tuple": tuple,
+            "dict": dict,
+            "set": set,
+            "bool": bool,
+            "str": str,
+        }
+
+        # TODO: Convert To Class
         def _findType(var):
             if isinstance(var, int):
                 return "int"
@@ -32,7 +51,11 @@ class CodingTest:
         arr = []
         for io in ios:
             value = io.pop("value")
-            type = io.pop("type") if "type" in io else _findType(value)
+
+            type = _findType(value)
+            if "type" in io and io["type"] != type:
+                convertTo = knownTypes[io["type"]]
+                value = convertTo(value)
             default = io.pop("default") if "default" in io else None
             options = io
             obj = IOObject(value, type, default, options)
@@ -69,6 +92,7 @@ class SingleTest:
         self.output = output
 
     def run(self, cls, fn):
+        print("running test {}".format(fn))
         # get input list
         inputToTest = []
         for input in self.input:
