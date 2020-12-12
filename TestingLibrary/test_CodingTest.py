@@ -3,6 +3,7 @@ from CodingTest import CodingTest
 """
 DONE: Add Test Cases for int
 DONE: Add Test Cases for int as float
+DONE: Add Test Cases for int as string
 DONE: Add Test Cases for Mixed types 
 TODO: Add Test Cases for linkedlist as list
 TODO: Add Test Cases for tree as dict
@@ -10,17 +11,21 @@ TODO: Add Test Cases for tree as list
 TODO: Add Test Cases for binarytree as list
 DONE: Add Test Cases for list
 DONE: Add Test Cases for bool
+DONE: Add Test Cases for bool as int
 TODO: Add Test Cases for dict
 DONE: Add Test Cases for tuple
 DONE: Add Test Cases for tuple as list
-DONE: Add Test Cases for float as int
 DONE: Add Test Cases for float
-TODO: Add Test Cases for set
-TODO: Add Test Cases for set as list
-TODO: Add Test Cases for string
-TODO: Add Test Cases for string vs other types 
+DONE: Add Test Cases for float as int
+DONE: Add Test Cases for float as string
+DONE: Add Test Cases for set
+DONE: Add Test Cases for set as list
+DONE: Add Test Cases for string
+DONE: Add Test Cases for string as int
+DONE: Add Test Cases for string as float
 TODO: Add Test for output as LinkedList
 TODO: Comments for each function
+DONE: Add Test if the function name is not passed
 """
 
 
@@ -49,8 +54,8 @@ class Problem:
     def testList(self, l):
         return l
 
-    def testBoolean(self, booleanTrue):
-        return booleanTrue
+    def testBoolean(self, booleanTrue, IntTrue, IntFalse):
+        return [booleanTrue, IntTrue, IntFalse]
 
     def testDict(self, d):
         return d
@@ -61,8 +66,14 @@ class Problem:
     def testFloat(self, fl1, fl2):
         return [fl1, fl2]
 
-    def testSet(self, s):
-        return s
+    def testSet(self, s1, s2):
+        return [s1, s2]
+
+    def main(self):
+        return "Function name not passed. default function main is executed"
+
+    def testVariousTypesAsString(self, decimal, number, true, false):
+        return [type(decimal), type(number), (true), (false)]
 
 
 tests = [
@@ -86,18 +97,18 @@ tests = [
             "output": [{"value": [3.0, 3]}],
         },
     },
-    # {
-    #     "function": "testLinkedList",
-    #     "params": {
-    #         "input": [{"value": [1, 2, 3], "type": "linkedlist"},],
-    #         "output": [{"value": [1, 2, 3]}],
-    #     },
-    # },
     {
         "function": "testList",
         "params": {
             "input": [{"value": [1, 2, 3], "type": "list"},],
             "output": [{"value": [1, 2, 3]}],
+        },
+    },
+    {
+        "function": "testSet",
+        "params": {
+            "input": [{"value": [1, 2, 3], "type": "set"}, {"value": {1, 2, 3}}],
+            "output": [{"value": [{1, 2, 3}, {1, 2, 3}]}],
         },
     },
     {
@@ -109,7 +120,14 @@ tests = [
     },
     {
         "function": "testBoolean",
-        "params": {"input": [{"value": True},], "output": [{"value": True}],},
+        "params": {
+            "input": [
+                {"value": True},
+                {"value": 1, "type": "bool"},
+                {"value": 0, "type": "bool"},
+            ],
+            "output": [{"value": [True, True, False]}],
+        },
     },
     {
         "function": "testFloat",
@@ -118,6 +136,33 @@ tests = [
             "output": [{"value": [3.0, 3]}],
         },
     },
+    # {
+    #     "function": "testVariousTypesAsString",
+    #     "params": {
+    #         "input": [
+    #             {"value": "3.0", "type": "float"},
+    #             {"value": "3", "type": "int"},
+    #             {"value": "True", "type": "bool"},
+    #             {"value": "False", "type": "bool"},
+    #         ],
+    #         "output": [{"value": [3.0, 3, True, False]}],
+    #     },
+    # },
+    {
+        "params": {
+            "input": [],
+            "output": [
+                {"value": "Function name not passed. default function main is executed"}
+            ],
+        }
+    },
+    # {
+    #     "function": "testLinkedList",
+    #     "params": {
+    #         "input": [{"value": [1, 2, 3], "type": "linkedlist"},],
+    #         "output": [{"value": [1, 2, 3]}],
+    #     },
+    # },
 ]
 c = CodingTest(tests)
 c.run(Problem)
