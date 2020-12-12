@@ -15,12 +15,16 @@ it easier to test my code after solving a problem.
 
 ### V2
 
+    TODO: More Flexible Type names like str can be string or str. Case Independent
+    TODO Test Description 
     TODO Show Execution Analytics
     TODO Show Error List
     TODO Show Stacktrace Option
 
 ### V3
 
+    TODO Add Test Cases for string as Boolean
+    TODO Support More than one output
     TODO Visualization
 
 ## Test Structure
