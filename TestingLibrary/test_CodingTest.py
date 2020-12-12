@@ -12,7 +12,7 @@ TODO: Add Test Cases for binarytree as list
 DONE: Add Test Cases for list
 DONE: Add Test Cases for bool
 DONE: Add Test Cases for bool as int
-TODO: Add Test Cases for dict
+DONE: Add Test Cases for dict
 DONE: Add Test Cases for tuple
 DONE: Add Test Cases for tuple as list
 DONE: Add Test Cases for float
@@ -109,6 +109,13 @@ tests = [
         "params": {
             "input": [{"value": [1, 2, 3], "type": "set"}, {"value": {1, 2, 3}}],
             "output": [{"value": [{1, 2, 3}, {1, 2, 3}]}],
+        },
+    },
+    {
+        "function": "testDict",
+        "params": {
+            "input": [{"value": {"a": 1, "b": 1}}],
+            "output": [{"value": {"a": 1, "b": 1}}],
         },
     },
     {
