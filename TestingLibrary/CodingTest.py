@@ -31,12 +31,78 @@ def LinkedList(arg):
             return LinkedListToArray(arg)
 
 
+class BinaryTreeNode:
+    def __init__(self, val=None):
+        self.val = val
+        self.left = None
+        self.right = None
+
+
+def BinaryTree(arg):
+    def ListToBinaryTree(arr: list):
+        cur = head = BinaryTreeNode()
+        cur.val = arr[0]
+        q = [cur]
+        for i in range(len(arr) // 2):
+            cur = q.pop(0)
+            if not cur:
+                continue
+            left = (2 * i) + 1
+            right = (2 * i) + 2
+
+            if left < len(arr) and arr[left] is not None:
+                cur.left = BinaryTreeNode(arr[left])
+            if right < len(arr) and arr[right] is not None:
+                cur.right = BinaryTreeNode(arr[right])
+            q.append(cur.left)
+            q.append(cur.right)
+        return head
+
+    def BinaryTreeToList(head: BinaryTreeNode):
+        cur = head
+        q = [cur]
+        arr = [cur.val]
+        while q:
+            cur = q.pop(0)
+            if cur:
+                if cur.left or cur.right:
+                    arr.append(cur.left.val if cur.left else None)
+                    arr.append(cur.right.val if cur.right else None)
+                    q.append(cur.left)
+                    q.append(cur.right)
+            else:
+                arr.append(None)
+                arr.append(None)
+        for i in range(len(arr) - 1, -1, -1):
+            if arr[-1] is None:
+                arr.pop()
+            else:
+                break
+        return arr
+
+    if arg:
+        if isinstance(arg, list):
+            return ListToBinaryTree(arg)
+        elif isinstance(arg, BinaryTreeNode):
+            return BinaryTreeToList(arg)
+
+
 class IOObject:
     def __init__(self, value, type=None, default=None, options={}):
         self.value = value
         self.type = type
         self.default = default
         self.options = options
+
+    def __repr__(self):
+        return str(
+            {
+                "value": self.value,
+                "type": self.type,
+                "default": self.default,
+                "options": self.options,
+            }
+        )
 
 
 class CodingTest:
@@ -56,7 +122,7 @@ class CodingTest:
             "str": str,
         }
 
-        customTypes = {"linkedlist": LinkedList}
+        customTypes = {"linkedlist": LinkedList, "binarytree": BinaryTree}
 
         # TODO: Convert To Class
         def _findType(var):
@@ -140,7 +206,7 @@ class SingleTest:
             "str": str,
         }
 
-        customTypes = {"linkedlist": LinkedList}
+        customTypes = {"linkedlist": LinkedList, "binarytree": BinaryTree}
 
         def _findType(var):
             if isinstance(var, int):
@@ -161,6 +227,8 @@ class SingleTest:
                 return "bool"
             elif isinstance(var, ListNode):
                 return "linkedlist"
+            elif isinstance(var, BinaryTreeNode):
+                return "binarytree"
 
         print("running test {}".format(fn))
         # get input list
@@ -180,6 +248,7 @@ class SingleTest:
 
         result = test(*inputToTest)
         resultType = _findType(result)
+
         if outputOfTest.type != resultType:
             if resultType in customTypes:
                 convertTo = customTypes[resultType]
