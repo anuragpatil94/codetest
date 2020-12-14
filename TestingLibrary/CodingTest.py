@@ -9,7 +9,6 @@ class ListNode:
         self.next = None
 
 
-# TODO: Linked List, Doubly Linked List, Circular Linked List using a settings param in Linkedlist class
 def LinkedList(arg):
     def ListToLinkedList(arr):
         head = curr = ListNode()
