@@ -9,8 +9,7 @@ it easier to test my code after solving a problem.
 
     DONE Takes any number of variables as the input
     DONE Add Support for LinkedList
-    TODO Add Support for Tree
-    TODO Add Support for Binary Tree
+    DONE Add Support for Binary Tree
     TODO Custom return feature when used or default return for tests
 
 ### V2
@@ -23,6 +22,7 @@ it easier to test my code after solving a problem.
 
 ### V3
 
+    TODO Add Support for Tree
     TODO: Add Test Cases for tree as dict
     TODO: Add Test Cases for tree as MultiDimentionalList
     TODO: Linked List, Doubly Linked List, Circular Linked List using a settings param in Linkedlist class
