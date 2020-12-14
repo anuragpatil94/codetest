@@ -1,11 +1,39 @@
 """
-TODO: Linked list Type Class
 TODO: Tree Type Class
 """
 
 
+class ListNode:
+    def __init__(self, val=None):
+        self.val = val
+        self.next = None
+
+
+# TODO: Linked List, Doubly Linked List, Circular Linked List using a settings param in Linkedlist class
+def LinkedList(arg):
+    def ListToLinkedList(arr):
+        head = curr = ListNode()
+        for num in arr:
+            curr.next = ListNode(num)
+            curr = curr.next
+        return head.next
+
+    def LinkedListToArray(l: ListNode) -> list:
+        arr = []
+        while l:
+            arr.append(l.val)
+            l = l.next
+        return arr
+
+    if arg:
+        if isinstance(arg, list):
+            return ListToLinkedList(arg)
+        elif isinstance(arg, ListNode):
+            return LinkedListToArray(arg)
+
+
 class IOObject:
-    def __init__(self, value, type, default, options={}):
+    def __init__(self, value, type=None, default=None, options={}):
         self.value = value
         self.type = type
         self.default = default
@@ -28,6 +56,8 @@ class CodingTest:
             "bool": bool,
             "str": str,
         }
+
+        customTypes = {"linkedlist": LinkedList}
 
         # TODO: Convert To Class
         def _findType(var):
@@ -52,10 +82,17 @@ class CodingTest:
         for io in ios:
             value = io.pop("value")
 
+            # Get Type from Value
             type = _findType(value)
+
+            # if `type` is initialized then check `type` key-value in the test
+            # and convert the value to that type
             if "type" in io and io["type"] != type:
-                convertTo = knownTypes[io["type"]]
-                value = convertTo(value)
+                convertTo = knownTypes.get(io["type"], None) or customTypes.get(
+                    io["type"], None
+                )
+                if convertTo is not None:
+                    value = convertTo(value)
             default = io.pop("default") if "default" in io else None
             options = io
             obj = IOObject(value, type, default, options)
@@ -92,6 +129,40 @@ class SingleTest:
         self.output = output
 
     def run(self, cls, fn):
+        knownTypes = {
+            "int": int,
+            "float": float,
+            "complex": complex,
+            "list": list,
+            "tuple": tuple,
+            "dict": dict,
+            "set": set,
+            "bool": bool,
+            "str": str,
+        }
+
+        customTypes = {"linkedlist": LinkedList}
+
+        def _findType(var):
+            if isinstance(var, int):
+                return "int"
+            elif isinstance(var, float):
+                return "float"
+            elif isinstance(var, complex):
+                return "complex"
+            elif isinstance(var, list):
+                return "list"
+            elif isinstance(var, tuple):
+                return "tuple"
+            elif isinstance(var, dict):
+                return "dict"
+            elif isinstance(var, set):
+                return "set"
+            elif isinstance(var, bool):
+                return "bool"
+            elif isinstance(var, ListNode):
+                return "linkedlist"
+
         print("running test {}".format(fn))
         # get input list
         inputToTest = []
@@ -99,7 +170,7 @@ class SingleTest:
             inputToTest.append(input.value)
 
         # get output
-        outputOfTest = self.output[0].value
+        outputOfTest = self.output[0]
 
         # run test
         try:
@@ -109,4 +180,14 @@ class SingleTest:
             print("Cannot find method ", fn)
 
         result = test(*inputToTest)
-        assert result == outputOfTest
+        resultType = _findType(result)
+        if outputOfTest.type != resultType:
+            if resultType in customTypes:
+                convertTo = customTypes[resultType]
+            else:
+                convertTo = knownTypes.get(outputOfTest.type, None) or customTypes.get(
+                    outputOfTest.type, None
+                )
+            if convertTo is not None:
+                result = convertTo(result)
+        assert result == outputOfTest.value

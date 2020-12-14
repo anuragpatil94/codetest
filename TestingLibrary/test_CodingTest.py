@@ -5,9 +5,9 @@ DONE: Add Test Cases for int
 DONE: Add Test Cases for int as float
 DONE: Add Test Cases for int as string
 DONE: Add Test Cases for Mixed types 
-TODO: Add Test Cases for linkedlist as list
+DONE: Add Test Cases for linkedlist as list
 TODO: Add Test Cases for tree as dict
-TODO: Add Test Cases for tree as list
+TODO: Add Test Cases for tree as MultiDimentionalList
 TODO: Add Test Cases for binarytree as list
 DONE: Add Test Cases for list
 DONE: Add Test Cases for bool
@@ -23,7 +23,6 @@ DONE: Add Test Cases for set as list
 DONE: Add Test Cases for string
 DONE: Add Test Cases for string as int
 DONE: Add Test Cases for string as float
-TODO: Add Test for output as LinkedList
 TODO: Comments for each function
 DONE: Add Test if the function name is not passed
 """
@@ -45,11 +44,11 @@ class Problem:
         library will convert to array to linkedlist and then pass it to 
         the function as a param
         """
-        arr = []
-        while linkedlist:
-            arr.append(linkedlist.val)
-            linkedlist = linkedlist.next
-        return arr
+        # arr = []
+        # while linkedlist:
+        #     arr.append(linkedlist.val)
+        #     linkedlist = linkedlist.next
+        return linkedlist
 
     def testList(self, l):
         return l
@@ -75,74 +74,86 @@ class Problem:
     def testVariousTypesAsString(self, decimal, number, true, false):
         return [type(decimal), type(number), (true), (false)]
 
+    def testLinkedListOutput(self, linkedList):
+        return linkedList
+
+    def testTreeAsDict(self, d):
+        pass
+
+    def testTreeAsMultiDimentionalList(self, l):
+        pass
+
+    def testBinaryTreeAsList(self, l):
+        pass
+
 
 tests = [
-    {
-        "function": "testDynamicInputs",
-        "params": {
-            "input": [
-                {"value": [1, 2, 3]},
-                {"value": [2, 3, 4], "type": "set"},
-                {"value": [4, 5, 6], "type": "tuple"},
-                {"value": 3},
-                {"value": 3, "type": "float"},
-            ],
-            "output": [{"value": [[1, 2, 3], {2, 3, 4}, (4, 5, 6), 3, 3.0]}],
-        },
-    },
-    {
-        "function": "testInt",
-        "params": {
-            "input": [{"value": 3, "type": "float"}, {"value": 3,}],
-            "output": [{"value": [3.0, 3]}],
-        },
-    },
-    {
-        "function": "testList",
-        "params": {
-            "input": [{"value": [1, 2, 3], "type": "list"},],
-            "output": [{"value": [1, 2, 3]}],
-        },
-    },
-    {
-        "function": "testSet",
-        "params": {
-            "input": [{"value": [1, 2, 3], "type": "set"}, {"value": {1, 2, 3}}],
-            "output": [{"value": [{1, 2, 3}, {1, 2, 3}]}],
-        },
-    },
-    {
-        "function": "testDict",
-        "params": {
-            "input": [{"value": {"a": 1, "b": 1}}],
-            "output": [{"value": {"a": 1, "b": 1}}],
-        },
-    },
-    {
-        "function": "testTuple",
-        "params": {
-            "input": [{"value": (1, 2, 3)}, {"value": [1, 2, 3], "type": "tuple"}],
-            "output": [{"value": [(1, 2, 3), (1, 2, 3),]}],
-        },
-    },
-    {
-        "function": "testBoolean",
-        "params": {
-            "input": [
-                {"value": True},
-                {"value": 1, "type": "bool"},
-                {"value": 0, "type": "bool"},
-            ],
-            "output": [{"value": [True, True, False]}],
-        },
-    },
-    {
-        "function": "testFloat",
-        "params": {
-            "input": [{"value": 3.0}, {"value": 3, "type": "float"},],
-            "output": [{"value": [3.0, 3]}],
-        },
-    },
+    # {
+    #     "function": "testDynamicInputs",
+    #     "params": {
+    #         "input": [
+    #             {"value": [1, 2, 3]},
+    #             {"value": [2, 3, 4], "type": "set"},
+    #             {"value": [4, 5, 6], "type": "tuple"},
+    #             {"value": 3},
+    #             {"value": 3, "type": "float"},
+    #         ],
+    #         "output": [{"value": [[1, 2, 3], {2, 3, 4}, (4, 5, 6), 3, 3.0]}],
+    #     },
+    # },
+    # {
+    #     "function": "testInt",
+    #     "params": {
+    #         "input": [{"value": 3, "type": "float"}, {"value": 3,}],
+    #         "output": [{"value": [3.0, 3]}],
+    #     },
+    # },
+    # {
+    #     "function": "testList",
+    #     "params": {
+    #         "input": [{"value": [1, 2, 3], "type": "list"},],
+    #         "output": [{"value": [1, 2, 3]}],
+    #     },
+    # },
+    # {
+    #     "function": "testSet",
+    #     "params": {
+    #         "input": [{"value": [1, 2, 3], "type": "set"}, {"value": {1, 2, 3}}],
+    #         "output": [{"value": [{1, 2, 3}, {1, 2, 3}]}],
+    #     },
+    # },
+    # {
+    #     "function": "testDict",
+    #     "params": {
+    #         "input": [{"value": {"a": 1, "b": 1}}],
+    #         "output": [{"value": {"a": 1, "b": 1}}],
+    #     },
+    # },
+    # {
+    #     "function": "testTuple",
+    #     "params": {
+    #         "input": [{"value": (1, 2, 3)}, {"value": [1, 2, 3], "type": "tuple"}],
+    #         "output": [{"value": [(1, 2, 3), (1, 2, 3),]}],
+    #     },
+    # },
+    # {
+    #     "function": "testBoolean",
+    #     "params": {
+    #         "input": [
+    #             {"value": True},
+    #             {"value": 1, "type": "bool"},
+    #             {"value": 0, "type": "bool"},
+    #         ],
+    #         "output": [{"value": [True, True, False]}],
+    #     },
+    # },
+    # {
+    #     "function": "testFloat",
+    #     "params": {
+    #         "input": [{"value": 3.0}, {"value": 3, "type": "float"},],
+    #         "output": [{"value": [3.0, 3]}],
+    #     },
+    # },
     # {
     #     "function": "testVariousTypesAsString",
     #     "params": {
@@ -155,21 +166,21 @@ tests = [
     #         "output": [{"value": [3.0, 3, True, False]}],
     #     },
     # },
-    {
-        "params": {
-            "input": [],
-            "output": [
-                {"value": "Function name not passed. default function main is executed"}
-            ],
-        }
-    },
     # {
-    #     "function": "testLinkedList",
     #     "params": {
-    #         "input": [{"value": [1, 2, 3], "type": "linkedlist"},],
-    #         "output": [{"value": [1, 2, 3]}],
-    #     },
+    #         "input": [],
+    #         "output": [
+    #             {"value": "Function name not passed. default function main is executed"}
+    #         ],
+    #     }
     # },
+    {
+        "function": "testLinkedList",
+        "params": {
+            "input": [{"value": [1, 2, 3], "type": "linkedlist"},],
+            "output": [{"value": [1, 2, 3]}],
+        },
+    },
 ]
 c = CodingTest(tests)
 c.run(Problem)

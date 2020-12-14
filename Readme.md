@@ -8,7 +8,7 @@ it easier to test my code after solving a problem.
 ### V1 (current)
 
     DONE Takes any number of variables as the input
-    TODO Add Support for LinkedList
+    DONE Add Support for LinkedList
     TODO Add Support for Tree
     TODO Add Support for Binary Tree
     TODO Custom return feature when used or default return for tests
@@ -23,6 +23,7 @@ it easier to test my code after solving a problem.
 
 ### V3
 
+    TODO: Add Test for output as LinkedList
     TODO Add Test Cases for string as Boolean
     TODO Add support for JSON as param
     TODO Support More than one output
