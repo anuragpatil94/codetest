@@ -1,6 +1,7 @@
 """
 TODO: Tree Type Class
 """
+from timeit import default_timer as timer
 
 
 class ListNode:
@@ -246,7 +247,13 @@ class SingleTest:
         except:
             print("Cannot find method ", fn)
 
+        start = timer()
         result = test(*inputToTest)
+        end = timer()
+        totaltime = end - start
+        print(
+            "Time taken to run this test: {}{}".format(round(totaltime * 1000, 3), "ms")
+        )
         resultType = _findType(result)
 
         if outputOfTest.type != resultType:
