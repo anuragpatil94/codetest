@@ -23,6 +23,9 @@ it easier to test my code after solving a problem.
 
 ### V3
 
+    TODO: Add Test Cases for tree as dict
+    TODO: Add Test Cases for tree as MultiDimentionalList
+    TODO: Linked List, Doubly Linked List, Circular Linked List using a settings param in Linkedlist class
     TODO: Add Test for output as LinkedList
     TODO Add Test Cases for string as Boolean
     TODO Add support for JSON as param
