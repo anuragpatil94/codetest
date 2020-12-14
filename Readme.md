@@ -10,6 +10,7 @@ it easier to test my code after solving a problem.
     DONE Takes any number of variables as the input
     DONE Add Support for LinkedList
     DONE Add Support for Binary Tree
+    DONE Time to run function
     TODO Custom return feature when used or default return for tests
 
 ### V2
