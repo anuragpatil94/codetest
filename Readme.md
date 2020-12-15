@@ -65,14 +65,13 @@ it easier to test my code after solving a problem.
 
 1. `int`
 2. `float`
-3. ?`complex`
-4. `list`
-5. `tuple`
-6. `dict`
-7. `set`
-8. `bool`
-9. `linkedlist`
-10. `tree`
-11. `binarytree`
+3. `list`
+4. `tuple`
+5. `dict`
+6. `set`
+7. `bool`
+8. `linkedlist`
+9. `tree`
+10. `binarytree`
 
 ### Class Structure
