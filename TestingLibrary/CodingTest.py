@@ -106,15 +106,14 @@ class IOObject:
         )
 
 
-class CodingTest:
-    def __init__(self, tests: list) -> None:
-        self.tests = tests
+class _Type:
+    def __init__(self):
+        pass
 
-    def _containerize(self, ios: list) -> list:
-        knownTypes = {
+    def getDefaultTypeAsClass(self, typeAsString):
+        defaultTypes = {
             "int": int,
             "float": float,
-            "complex": complex,
             "list": list,
             "tuple": tuple,
             "dict": dict,
@@ -122,55 +121,58 @@ class CodingTest:
             "bool": bool,
             "str": str,
         }
+        return defaultTypes.get(typeAsString, None)
 
-        customTypes = {"linkedlist": LinkedList, "binarytree": BinaryTree}
+    def getCustomTypeAsClass(self, typeAsString):
+        customTypes = {
+            "linkedlist": LinkedList,
+            "binarytree": BinaryTree,
+        }
+        return customTypes.get(typeAsString, None)
 
-        # TODO: Convert To Class
-        def _findType(var):
-            if isinstance(var, int):
-                return "int"
-            elif isinstance(var, float):
-                return "float"
-            elif isinstance(var, complex):
-                return "complex"
-            elif isinstance(var, list):
-                return "list"
-            elif isinstance(var, tuple):
-                return "tuple"
-            elif isinstance(var, dict):
-                return "dict"
-            elif isinstance(var, set):
-                return "set"
-            elif isinstance(var, bool):
-                return "bool"
+    def getTypeAsString(self, typeAsClass) -> str:
+        if isinstance(typeAsClass, int):
+            return "int"
+        elif isinstance(typeAsClass, str):
+            return "str"
+        elif isinstance(typeAsClass, float):
+            return "float"
+        elif isinstance(typeAsClass, list):
+            return "list"
+        elif isinstance(typeAsClass, tuple):
+            return "tuple"
+        elif isinstance(typeAsClass, dict):
+            return "dict"
+        elif isinstance(typeAsClass, set):
+            return "set"
+        elif isinstance(typeAsClass, bool):
+            return "bool"
+        elif isinstance(typeAsClass, ListNode):
+            return "linkedlist"
+        elif isinstance(typeAsClass, BinaryTreeNode):
+            return "binarytree"
 
-        arr = []
-        for io in ios:
-            value = io.pop("value")
+    def getConversionType(self, data, conversionTypeString=None):
+        actualDataTypeString = self.getTypeAsString(data)
 
-            # Get Type from Value
-            type = _findType(value)
+        if self.getCustomTypeAsClass(actualDataTypeString) or not conversionTypeString:
+            return (
+                actualDataTypeString,
+                self.getCustomTypeAsClass(actualDataTypeString)
+                or self.getDefaultTypeAsClass(actualDataTypeString),
+            )
 
-            # if `type` is initialized then check `type` key-value in the test
-            # and convert the value to that type
-            if "type" in io and io["type"] != type:
-                convertTo = knownTypes.get(io["type"], None) or customTypes.get(
-                    io["type"], None
-                )
-                if convertTo is not None:
-                    value = convertTo(value)
-            default = io.pop("default") if "default" in io else None
-            options = io
-            obj = IOObject(value, type, default, options)
+        if conversionTypeString:
+            return (
+                conversionTypeString,
+                self.getCustomTypeAsClass(conversionTypeString)
+                or self.getDefaultTypeAsClass(conversionTypeString),
+            )
 
-            arr.append(obj)
-        return arr
 
-    def toString(self):
-        pass
-
-    def visualize(self):
-        pass
+class CodingTest:
+    def __init__(self, tests: list) -> None:
+        self.tests = tests
 
     def run(self, Problem):
 
@@ -181,12 +183,37 @@ class CodingTest:
 
             # get input and output params
             params = test["params"]
-            input = self._containerize(params["input"])
-            output = self._containerize(params["output"])
+            inputParams = self._containerize(params["input"])
+            outputParams = self._containerize(params["output"])
 
             # Run Test on the function
-            s = SingleTest(input, output)
-            s.run(Problem, function)
+            sTest = SingleTest(inputParams, outputParams)
+            sTest.run(Problem, function)
+
+    def _containerize(self, ios: list) -> list:
+        """Creates a list of IOObject Object containing ios data"""
+        Type = _Type()
+        arr = []
+        for io in ios:
+            data = io.pop("value")
+
+            conversionTypeString = io.pop("type") if "type" in io else None
+            conversionTypeString, conversionTypeClass = Type.getConversionType(
+                data, conversionTypeString
+            )
+
+            data = conversionTypeClass(data)
+            default = io.pop("default") if "default" in io else None
+            options = io
+            obj = IOObject(data, conversionTypeString, default, options)
+            arr.append(obj)
+        return arr
+
+    def toString(self):
+        pass
+
+    def visualize(self):
+        pass
 
 
 class SingleTest:
@@ -194,75 +221,45 @@ class SingleTest:
         self.input = input
         self.output = output
 
+    def _getInputArray(self):
+        pass
+
+    def _getOutputArray(self):
+        pass
+
     def run(self, cls, fn):
-        knownTypes = {
-            "int": int,
-            "float": float,
-            "complex": complex,
-            "list": list,
-            "tuple": tuple,
-            "dict": dict,
-            "set": set,
-            "bool": bool,
-            "str": str,
-        }
-
-        customTypes = {"linkedlist": LinkedList, "binarytree": BinaryTree}
-
-        def _findType(var):
-            if isinstance(var, int):
-                return "int"
-            elif isinstance(var, float):
-                return "float"
-            elif isinstance(var, complex):
-                return "complex"
-            elif isinstance(var, list):
-                return "list"
-            elif isinstance(var, tuple):
-                return "tuple"
-            elif isinstance(var, dict):
-                return "dict"
-            elif isinstance(var, set):
-                return "set"
-            elif isinstance(var, bool):
-                return "bool"
-            elif isinstance(var, ListNode):
-                return "linkedlist"
-            elif isinstance(var, BinaryTreeNode):
-                return "binarytree"
-
         print("running test {}".format(fn))
+
         # get input list
-        inputToTest = []
+        inputParams = []
         for input in self.input:
-            inputToTest.append(input.value)
+            inputParams.append(input.value)
 
         # get output
-        outputOfTest = self.output[0]
+        outputIOObject = self.output[0]
 
         # run test
         try:
-            c = cls()
-            test = getattr(c, fn)
+            DynamicClass = cls()
+            testFunction = getattr(DynamicClass, fn)
         except:
             print("Cannot find method ", fn)
 
         start = timer()
-        result = test(*inputToTest)
+        output = testFunction(*inputParams)
         end = timer()
         totaltime = end - start
         print(
             "Time taken to run this test: {}{}".format(round(totaltime * 1000, 3), "ms")
         )
-        resultType = _findType(result)
 
-        if outputOfTest.type != resultType:
-            if resultType in customTypes:
-                convertTo = customTypes[resultType]
-            else:
-                convertTo = knownTypes.get(outputOfTest.type, None) or customTypes.get(
-                    outputOfTest.type, None
-                )
-            if convertTo is not None:
-                result = convertTo(result)
-        assert result == outputOfTest.value
+        Type = _Type()
+
+        conversionTypeString, conversionTypeClass = Type.getConversionType(
+            output, outputIOObject.type
+        )
+        output = conversionTypeClass(output)
+        assert output == outputIOObject.value
+
+        def _execute(*args):
+            pass
