@@ -10,26 +10,29 @@ class ListNode:
         self.next = None
 
 
-def LinkedList(arg):
-    def ListToLinkedList(arr):
+class LinkedList:
+    def __init__(self, arg):
+        pass
+
+    def __new__(cls, arg):
+        if isinstance(arg, ListNode):
+            return cls.LinkedListToArray(cls, arg)
+        if isinstance(arg, list):
+            return cls.ListToLinkedList(cls, arg)
+
+    def ListToLinkedList(self, arr) -> ListNode:
         head = curr = ListNode()
         for num in arr:
             curr.next = ListNode(num)
             curr = curr.next
         return head.next
 
-    def LinkedListToArray(l: ListNode) -> list:
+    def LinkedListToArray(self, l) -> list:
         arr = []
         while l:
             arr.append(l.val)
             l = l.next
         return arr
-
-    if arg:
-        if isinstance(arg, list):
-            return ListToLinkedList(arg)
-        elif isinstance(arg, ListNode):
-            return LinkedListToArray(arg)
 
 
 class BinaryTreeNode:
@@ -39,8 +42,17 @@ class BinaryTreeNode:
         self.right = None
 
 
-def BinaryTree(arg):
-    def ListToBinaryTree(arr: list):
+class BinaryTree:
+    def __init__(self, arg):
+        pass
+
+    def __new__(cls, arg):
+        if isinstance(arg, list):
+            return cls.ListToBinaryTree(cls, arg)
+        elif isinstance(arg, BinaryTreeNode):
+            return cls.BinaryTreeToList(cls, arg)
+
+    def ListToBinaryTree(self, arr: list):
         cur = head = BinaryTreeNode()
         cur.val = arr[0]
         q = [cur]
@@ -59,7 +71,7 @@ def BinaryTree(arg):
             q.append(cur.right)
         return head
 
-    def BinaryTreeToList(head: BinaryTreeNode):
+    def BinaryTreeToList(self, head: BinaryTreeNode):
         cur = head
         q = [cur]
         arr = [cur.val]
@@ -80,12 +92,6 @@ def BinaryTree(arg):
             else:
                 break
         return arr
-
-    if arg:
-        if isinstance(arg, list):
-            return ListToBinaryTree(arg)
-        elif isinstance(arg, BinaryTreeNode):
-            return BinaryTreeToList(arg)
 
 
 class IOObject:
