@@ -1,5 +1,0 @@
-cython
-wheel
-setuptools
-twine
-numpy
