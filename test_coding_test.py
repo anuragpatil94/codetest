@@ -1,4 +1,4 @@
-from CodingTest import CodingTest
+from coding_test_lib import CodingTest
 
 """
 DONE: Add Test Cases for int
