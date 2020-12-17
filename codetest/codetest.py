@@ -85,7 +85,7 @@ class _Type:
             )
 
 
-class CodingTest:
+class CodeTest:
     def __init__(self, tests: list) -> None:
         self.tests = tests
 

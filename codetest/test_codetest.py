@@ -1,4 +1,4 @@
-from code_testing_lib import CodingTest
+from codetest import CodeTest
 
 """
 DONE: Add Test Cases for int
@@ -204,5 +204,5 @@ tests = [
         },
     },
 ]
-c = CodingTest(tests)
+c = CodeTest(tests)
 c.run(Problem)
