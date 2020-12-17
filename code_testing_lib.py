@@ -2,99 +2,11 @@
 TODO: Tree Type Class
 """
 from timeit import default_timer as timer
+from utils.tree import *
+from utils.linked_list import *
 
 
-class ListNode:
-    def __init__(self, val=None):
-        self.val = val
-        self.next = None
-
-
-class LinkedList:
-    def __init__(self, arg):
-        pass
-
-    def __new__(cls, arg):
-        if isinstance(arg, ListNode):
-            return cls.LinkedListToArray(cls, arg)
-        if isinstance(arg, list):
-            return cls.ListToLinkedList(cls, arg)
-
-    def ListToLinkedList(self, arr) -> ListNode:
-        head = curr = ListNode()
-        for num in arr:
-            curr.next = ListNode(num)
-            curr = curr.next
-        return head.next
-
-    def LinkedListToArray(self, l) -> list:
-        arr = []
-        while l:
-            arr.append(l.val)
-            l = l.next
-        return arr
-
-
-class BinaryTreeNode:
-    def __init__(self, val=None):
-        self.val = val
-        self.left = None
-        self.right = None
-
-
-class BinaryTree:
-    def __init__(self, arg):
-        pass
-
-    def __new__(cls, arg):
-        if isinstance(arg, list):
-            return cls.ListToBinaryTree(cls, arg)
-        elif isinstance(arg, BinaryTreeNode):
-            return cls.BinaryTreeToList(cls, arg)
-
-    def ListToBinaryTree(self, arr: list):
-        cur = head = BinaryTreeNode()
-        cur.val = arr[0]
-        q = [cur]
-        for i in range(len(arr) // 2):
-            cur = q.pop(0)
-            if not cur:
-                continue
-            left = (2 * i) + 1
-            right = (2 * i) + 2
-
-            if left < len(arr) and arr[left] is not None:
-                cur.left = BinaryTreeNode(arr[left])
-            if right < len(arr) and arr[right] is not None:
-                cur.right = BinaryTreeNode(arr[right])
-            q.append(cur.left)
-            q.append(cur.right)
-        return head
-
-    def BinaryTreeToList(self, head: BinaryTreeNode):
-        cur = head
-        q = [cur]
-        arr = [cur.val]
-        while q:
-            cur = q.pop(0)
-            if cur:
-                if cur.left or cur.right:
-                    arr.append(cur.left.val if cur.left else None)
-                    arr.append(cur.right.val if cur.right else None)
-                    q.append(cur.left)
-                    q.append(cur.right)
-            else:
-                arr.append(None)
-                arr.append(None)
-        for i in range(len(arr) - 1, -1, -1):
-            if arr[-1] is None:
-                arr.pop()
-            else:
-                break
-        return arr
-
-
-class IOObject:
+class _IOObject:
     def __init__(self, value, type=None, default=None, options={}):
         self.value = value
         self.type = type
@@ -211,7 +123,7 @@ class CodingTest:
             data = conversionTypeClass(data)
             default = io.pop("default") if "default" in io else None
             options = io
-            obj = IOObject(data, conversionTypeString, default, options)
+            obj = _IOObject(data, conversionTypeString, default, options)
             arr.append(obj)
         return arr
 
@@ -223,7 +135,7 @@ class CodingTest:
 
 
 class SingleTest:
-    def __init__(self, input: [IOObject], output: [IOObject]):
+    def __init__(self, input: [_IOObject], output: [_IOObject]):
         self.input = input
         self.output = output
 
