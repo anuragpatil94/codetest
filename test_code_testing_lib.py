@@ -115,7 +115,7 @@ tests = [
         "function": "testList",
         "params": {
             "input": [{"value": [1, 2, 3], "type": "list"},],
-            "output": [{"value": [1, 2, 3]}],
+            "output": [{"value": [1, 2, 3, 4]}],
         },
     },
     {
@@ -199,7 +199,7 @@ tests = [
                 },
             ],
             "output": [
-                {"value": [2, 4, 6, 8, None, 12, 14, 16, None, None, None, 18, 20]},
+                {"value": [2, 4, 6, 8, None, 12, 142, 16, None, None, None, 18, 20]},
             ],
         },
     },

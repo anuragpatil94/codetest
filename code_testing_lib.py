@@ -1,6 +1,3 @@
-"""
-TODO: Tree Type Class
-"""
 from timeit import default_timer as timer
 from utils.tree import *
 from utils.linked_list import *
@@ -48,26 +45,26 @@ class _Type:
         }
         return customTypes.get(typeAsString, None)
 
-    def getTypeAsString(self, typeAsClass) -> str:
-        if isinstance(typeAsClass, int):
+    def getTypeAsString(self, data) -> str:
+        if isinstance(data, int):
             return "int"
-        elif isinstance(typeAsClass, str):
+        elif isinstance(data, str):
             return "str"
-        elif isinstance(typeAsClass, float):
+        elif isinstance(data, float):
             return "float"
-        elif isinstance(typeAsClass, list):
+        elif isinstance(data, list):
             return "list"
-        elif isinstance(typeAsClass, tuple):
+        elif isinstance(data, tuple):
             return "tuple"
-        elif isinstance(typeAsClass, dict):
+        elif isinstance(data, dict):
             return "dict"
-        elif isinstance(typeAsClass, set):
+        elif isinstance(data, set):
             return "set"
-        elif isinstance(typeAsClass, bool):
+        elif isinstance(data, bool):
             return "bool"
-        elif isinstance(typeAsClass, ListNode):
+        elif isinstance(data, ListNode):
             return "linkedlist"
-        elif isinstance(typeAsClass, BinaryTreeNode):
+        elif isinstance(data, BinaryTreeNode):
             return "binarytree"
 
     def getConversionType(self, data, conversionTypeString=None):
@@ -95,7 +92,7 @@ class CodingTest:
     def run(self, Problem):
 
         # For each test get input and outputs
-        for test in self.tests:
+        for index, test in enumerate(self.tests):
             # function to test
             function = test["function"] if "function" in test else "main"
 
@@ -105,8 +102,8 @@ class CodingTest:
             outputParams = self._containerize(params["output"])
 
             # Run Test on the function
-            sTest = SingleTest(inputParams, outputParams)
-            sTest.run(Problem, function)
+            sTest = SingleTest(Problem, function, index, inputParams, outputParams)
+            sTest.run()
 
     def _containerize(self, ios: list) -> list:
         """Creates a list of IOObject Object containing ios data"""
@@ -127,15 +124,15 @@ class CodingTest:
             arr.append(obj)
         return arr
 
-    def toString(self):
-        pass
-
     def visualize(self):
         pass
 
 
 class SingleTest:
-    def __init__(self, input: [_IOObject], output: [_IOObject]):
+    def __init__(self, cls, fn, testIndex, input: [_IOObject], output: [_IOObject]):
+        self.cls = cls
+        self.fn = fn
+        self.testIndex = testIndex
         self.input = input
         self.output = output
 
@@ -145,9 +142,26 @@ class SingleTest:
     def _getOutputArray(self):
         pass
 
-    def run(self, cls, fn):
-        print("running test {}".format(fn))
+    def _getErrorMessage(self, expectedOutput, actualOutput, time):
+        strExpectedOut = str(expectedOutput)
+        strActualOut = str(actualOutput)
 
+        minHorizontalLen = 60
+
+        heading = "[TEST {}]".format(str(self.testIndex)).center(minHorizontalLen, "-")
+        txt = """{}\nExpected Output: {}\nActual Output:   {}\n{}\n{}
+        """.format(
+            heading,
+            strExpectedOut,
+            strActualOut,
+            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(
+                minHorizontalLen
+            ),
+            "".center(minHorizontalLen, "-"),
+        )
+        return txt
+
+    def run(self):
         # get input list
         inputParams = []
         for input in self.input:
@@ -158,18 +172,15 @@ class SingleTest:
 
         # run test
         try:
-            DynamicClass = cls()
-            testFunction = getattr(DynamicClass, fn)
+            DynamicClass = self.cls()
+            testFunction = getattr(DynamicClass, self.fn)
         except:
-            print("Cannot find method ", fn)
+            print("Cannot find method ", self.fn)
 
         start = timer()
         output = testFunction(*inputParams)
         end = timer()
         totaltime = end - start
-        print(
-            "Time taken to run this test: {}{}".format(round(totaltime * 1000, 3), "ms")
-        )
 
         Type = _Type()
 
@@ -177,7 +188,10 @@ class SingleTest:
             output, outputIOObject.type
         )
         output = conversionTypeClass(output)
-        assert output == outputIOObject.value
+        try:
+            assert output == outputIOObject.value
+        except Exception as e:
+            print(self._getErrorMessage(outputIOObject.value, output, totaltime))
 
-        def _execute(*args):
-            pass
+    def _execute(self, *args):
+        pass
