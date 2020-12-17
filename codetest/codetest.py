@@ -1,88 +1,6 @@
 from timeit import default_timer as timer
-from utils.tree import *
-from utils.linked_list import *
-
-
-class _IOObject:
-    def __init__(self, value, type=None, default=None, options={}):
-        self.value = value
-        self.type = type
-        self.default = default
-        self.options = options
-
-    def __repr__(self):
-        return str(
-            {
-                "value": self.value,
-                "type": self.type,
-                "default": self.default,
-                "options": self.options,
-            }
-        )
-
-
-class _Type:
-    def __init__(self):
-        pass
-
-    def getDefaultTypeAsClass(self, typeAsString):
-        defaultTypes = {
-            "int": int,
-            "float": float,
-            "list": list,
-            "tuple": tuple,
-            "dict": dict,
-            "set": set,
-            "bool": bool,
-            "str": str,
-        }
-        return defaultTypes.get(typeAsString, None)
-
-    def getCustomTypeAsClass(self, typeAsString):
-        customTypes = {
-            "linkedlist": LinkedList,
-            "binarytree": BinaryTree,
-        }
-        return customTypes.get(typeAsString, None)
-
-    def getTypeAsString(self, data) -> str:
-        if isinstance(data, int):
-            return "int"
-        elif isinstance(data, str):
-            return "str"
-        elif isinstance(data, float):
-            return "float"
-        elif isinstance(data, list):
-            return "list"
-        elif isinstance(data, tuple):
-            return "tuple"
-        elif isinstance(data, dict):
-            return "dict"
-        elif isinstance(data, set):
-            return "set"
-        elif isinstance(data, bool):
-            return "bool"
-        elif isinstance(data, ListNode):
-            return "linkedlist"
-        elif isinstance(data, BinaryTreeNode):
-            return "binarytree"
-
-    def getConversionType(self, data, conversionTypeString=None):
-        actualDataTypeString = self.getTypeAsString(data)
-
-        if self.getCustomTypeAsClass(actualDataTypeString) or not conversionTypeString:
-            return (
-                actualDataTypeString,
-                self.getCustomTypeAsClass(actualDataTypeString)
-                or self.getDefaultTypeAsClass(actualDataTypeString),
-            )
-
-        if conversionTypeString:
-            return (
-                conversionTypeString,
-                self.getCustomTypeAsClass(conversionTypeString)
-                or self.getDefaultTypeAsClass(conversionTypeString),
-            )
+from utils._type import _Type
+from utils._ioobject import _IOObject
 
 
 class CodeTest:
@@ -102,7 +20,7 @@ class CodeTest:
             outputParams = self._containerize(params["output"])
 
             # Run Test on the function
-            sTest = SingleTest(Problem, function, index, inputParams, outputParams)
+            sTest = _SingleTest(Problem, function, index, inputParams, outputParams)
             sTest.run()
 
     def _containerize(self, ios: list) -> list:
@@ -128,7 +46,7 @@ class CodeTest:
         pass
 
 
-class SingleTest:
+class _SingleTest:
     def __init__(self, cls, fn, testIndex, input: [_IOObject], output: [_IOObject]):
         self.cls = cls
         self.fn = fn
@@ -195,3 +113,4 @@ class SingleTest:
 
     def _execute(self, *args):
         pass
+
