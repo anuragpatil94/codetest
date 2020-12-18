@@ -1,7 +1,6 @@
 # codetest
 
-This is a small Testing Library I created with my own requirements to make
-it easier to test my code after solving a problem.
+A Code testing library which makes it easier to test code after solving a coding problem.
 
 ## Test Structure
 
