@@ -1,6 +1,4 @@
-from utils.linked_list import *
-from utils.tree import *
-
+from .ds import *
 
 class _Type:
     def __init__(self):

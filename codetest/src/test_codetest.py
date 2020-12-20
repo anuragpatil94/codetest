@@ -38,8 +38,8 @@ class Problem:
 
     def testLinkedList(self, linkedlist):
         """
-        This test is to check if an array is passed as a test, the 
-        library will convert to array to linkedlist and then pass it to 
+        This test is to check if an array is passed as a test, the
+        library will convert to array to linkedlist and then pass it to
         the function as a param
         """
         # arr = []
@@ -107,14 +107,21 @@ tests = [
     {
         "function": "testInt",
         "params": {
-            "input": [{"value": 3, "type": "float"}, {"value": 3,}],
+            "input": [
+                {"value": 3, "type": "float"},
+                {
+                    "value": 3,
+                },
+            ],
             "output": [{"value": [3.0, 3]}],
         },
     },
     {
         "function": "testList",
         "params": {
-            "input": [{"value": [1, 2, 3], "type": "list"},],
+            "input": [
+                {"value": [1, 2, 3], "type": "list"},
+            ],
             "output": [{"value": [1, 2, 3, 4]}],
         },
     },
@@ -136,7 +143,14 @@ tests = [
         "function": "testTuple",
         "params": {
             "input": [{"value": (1, 2, 3)}, {"value": [1, 2, 3], "type": "tuple"}],
-            "output": [{"value": [(1, 2, 3), (1, 2, 3),]}],
+            "output": [
+                {
+                    "value": [
+                        (1, 2, 3),
+                        (1, 2, 3),
+                    ]
+                }
+            ],
         },
     },
     {
@@ -153,7 +167,10 @@ tests = [
     {
         "function": "testFloat",
         "params": {
-            "input": [{"value": 3.0}, {"value": 3, "type": "float"},],
+            "input": [
+                {"value": 3.0},
+                {"value": 3, "type": "float"},
+            ],
             "output": [{"value": [3.0, 3]}],
         },
     },
@@ -178,15 +195,21 @@ tests = [
     {
         "function": "testLinkedList",
         "params": {
-            "input": [{"value": [1, 2, 3], "type": "linkedlist"},],
+            "input": [
+                {"value": [1, 2, 3], "type": "linkedlist"},
+            ],
             "output": [{"value": [1, 2, 3]}],
         },
     },
     {
         "function": "testBinaryTreeAsList",
         "params": {
-            "input": [{"value": [1, 2, 3], "type": "binarytree"},],
-            "output": [{"value": [2, 4, 6]},],
+            "input": [
+                {"value": [1, 2, 3], "type": "binarytree"},
+            ],
+            "output": [
+                {"value": [2, 4, 6]},
+            ],
         },
     },
     {
@@ -194,7 +217,21 @@ tests = [
         "params": {
             "input": [
                 {
-                    "value": [1, 2, 3, 4, None, 6, 7, 8, None, None, None, 9, 10,],
+                    "value": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        None,
+                        6,
+                        7,
+                        8,
+                        None,
+                        None,
+                        None,
+                        9,
+                        10,
+                    ],
                     "type": "binarytree",
                 },
             ],
@@ -204,5 +241,6 @@ tests = [
         },
     },
 ]
-c = CodeTest(tests)
-c.run(Problem)
+
+# Run Tests
+CodeTest(tests, Problem)
