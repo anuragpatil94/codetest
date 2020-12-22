@@ -1,4 +1,3 @@
 include *.md
 include LICENSE
 recursive-include codetest *.py
-recursive-include docs *.md
