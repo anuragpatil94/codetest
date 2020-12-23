@@ -1,20 +1,26 @@
-from _codetest import _CodeTest
+if __package__:
+    from ._codetest import _CodeTest
+else:
+    from _codetest import _CodeTest
 
 """[summary]
 A simple library to run multiple tests on the written coding problem
 """
 
 # PUBLIC INTERFACE
-def CodeTest(tests:list, cls: object):
+
+
+def CodeTest(tests: list, cls: object):
     """Pass a list of tests and code class as param to run the tests
 
     Args:
         tests (list): a list of tests that are to be performed on your function
-        eg. 
+
+        eg.
         * ? - Optional
         tests = [
             {
-                function: "<name_of_fn>"// if not provided default: `main` 
+                function?: "<name_of_fn>"// default: `main`
                 params: {
                     input:[
                         {
@@ -31,8 +37,8 @@ def CodeTest(tests:list, cls: object):
                 }
             }
         ]
-        cls (object): The class which contains the code function 
-    
+        cls (object): The class which contains the code function
+
     ### Types Supported
     1. `int`
     2. `float`
@@ -43,13 +49,6 @@ def CodeTest(tests:list, cls: object):
     7. `bool`
     8. `linkedlist`
     9. `binarytree`
-    """    
+    """
     codetest = _CodeTest(tests)
     codetest.run(cls)
-
-
-
-
-
-
-

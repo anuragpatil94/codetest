@@ -2,36 +2,76 @@
 
 A simple python library which makes it easier to test code after solving a coding problem.
 
-## Test Structure
+## How to Install
 
-    ```python
-    Tests = [
+> `pip install codetest`
+
+## How to Use
+
+### How to write a testcase?
+
+```python
+#index.py
+from codetest import CodeTest
+class Problem:
+    def sumOfTwoNumbers(self, a,b):
+        return a + b
+
+tests = [{
+    "function" : "sumOfTwoNumbers",
+    "params" : {
+        "input":[
+            {"value":5},
+            {"value":4},
+        ],
+        "output":[{"value":8}]
+    }
+}]
+
+CodeTest(tests,Problem)
+```
+
+- This will result in following output
+
+```
+--------------------------[TEST 0]--------------------------
+Expected Output: 8
+Actual Output:   9
+                                             [Time: 0.001ms]
+------------------------------------------------------------
+```
+
+## Tests
+
+### Testcase Structure
+
+`? - Optional`
+
+```python
+    tests = [
         {
-            function: "" // default "main"
+            function?: "" // default "main"
             params: {
                 input:[],
                 output:[]
             }
         }
     ]
-    ```
+```
 
 - If `function` is not provided, the default function would be `main`
 - The order in which the `input` Objects are supposed to be added would be same as the params passed in the `function`.
 
-## How to Install
-
-## How to Use
-
 ### Input/Output Structure
 
-    ? - Optional
-    ```python
+`? - Optional`
+
+```python
     {
         value: any,
         type?: any,
     }
-    ```
+```
 
 #### Supported Types
 

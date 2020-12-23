@@ -236,7 +236,8 @@ tests = [
                 },
             ],
             "output": [
-                {"value": [2, 4, 6, 8, None, 12, 142, 16, None, None, None, 18, 20]},
+                {"value": [2, 4, 6, 8, None, 12, 142,
+                           16, None, None, None, 18, 20]},
             ],
         },
     },
