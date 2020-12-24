@@ -32,7 +32,7 @@ class Problem:
     def testDynamicInputs(self, arr, setAsArr, tupleAsArr, integerNumber, floatNumber):
         return [arr, setAsArr, tupleAsArr, integerNumber, floatNumber]
 
-    def testInt(self, num1, num2):
+    def testInt(self, num1=3, num2=3):
         return [num1, num2]
 
     def testLinkedList(self, linkedlist):
@@ -125,6 +125,12 @@ tests = [
                 },
             ],
             "output": [{"value": [3.0, 3]}],
+        },
+    },
+    {
+        "function": "testInt",
+        "params": {
+            "output": [{"value": [3, 3]}],
         },
     },
     {
