@@ -15,6 +15,7 @@ def CodeTest(tests: list, cls: object):
 
     Args:
         tests (list): a list of tests that are to be performed on your function
+        cls (object): The class which contains the code function
 
         eg.
         * ? - Optional
@@ -37,7 +38,6 @@ def CodeTest(tests: list, cls: object):
                 }
             }
         ]
-        cls (object): The class which contains the code function
 
     ### Types Supported
     1. `int`
