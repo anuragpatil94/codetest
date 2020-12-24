@@ -105,14 +105,17 @@ class _CodeTest:
             function = test["function"] if "function" in test else "main"
 
             # get input and output params and create list of _IOObject
-            params = test["params"]
+            inputParams = None
+            outputParams = None
+            if "params" in test:
+                params = test["params"]
 
-            inputParams = (
-                self._containerize(params["input"]) if "input" in params else None
-            )
-            outputParams = (
-                self._containerize(params["output"]) if "output" in params else None
-            )
+                inputParams = (
+                    self._containerize(params["input"]) if "input" in params else None
+                )
+                outputParams = (
+                    self._containerize(params["output"]) if "output" in params else None
+                )
 
             # Run a test on the function
             sTest = _SingleTest(Problem, function, index, inputParams, outputParams)
@@ -200,7 +203,9 @@ class _SingleTest:
                 inputParams.append(input.value)
 
         # get output
-        expectedOpObj = self.output[0] if self.output is not None else None
+        expectedOpObj = None
+        if self.output is not None:
+            expectedOpObj = self.output[0]
 
         # run test
         try:
