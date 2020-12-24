@@ -21,7 +21,6 @@ DONE: Add Test Cases for set as list
 DONE: Add Test Cases for string
 DONE: Add Test Cases for string as int
 DONE: Add Test Cases for string as float
-TODO: Comments for each function
 DONE: Add Test if the function name is not passed
 """
 
@@ -103,161 +102,161 @@ class Problem:
 
 
 tests = [
-    # {
-    #     "function": "testDynamicInputs",
-    #     "params": {
-    #         "input": [
-    #             {"value": [1, 2, 3]},
-    #             {"value": [2, 3, 4], "type": "set"},
-    #             {"value": [4, 5, 6], "type": "tuple"},
-    #             {"value": 3},
-    #             {"value": 3, "type": "float"},
-    #         ],
-    #         "output": [{"value": [[1, 2, 3], {2, 3, 4}, (4, 5, 6), 3, 3.0]}],
-    #     },
-    # },
-    # {
-    #     "function": "testInt",
-    #     "params": {
-    #         "input": [
-    #             {"value": 3, "type": "float"},
-    #             {
-    #                 "value": 3,
-    #             },
-    #         ],
-    #         "output": [{"value": [3.0, 3]}],
-    #     },
-    # },
-    # {
-    #     "function": "testList",
-    #     "params": {
-    #         "input": [
-    #             {"value": [1, 2, 3], "type": "list"},
-    #         ],
-    #         "output": [{"value": [1, 2, 3]}],
-    #     },
-    # },
-    # {
-    #     "function": "testSet",
-    #     "params": {
-    #         "input": [{"value": [1, 2, 3], "type": "set"}, {"value": {1, 2, 3}}],
-    #         "output": [{"value": [{1, 2, 3}, {1, 2, 3}]}],
-    #     },
-    # },
-    # {
-    #     "function": "testDict",
-    #     "params": {
-    #         "input": [{"value": {"a": 1, "b": 1}}],
-    #         "output": [{"value": {"a": 1, "b": 1}}],
-    #     },
-    # },
-    # {
-    #     "function": "testTuple",
-    #     "params": {
-    #         "input": [{"value": (1, 2, 3)}, {"value": [1, 2, 3], "type": "tuple"}],
-    #         "output": [{"value": [(1, 2, 3), (1, 2, 3)]}],
-    #     },
-    # },
-    # {
-    #     "function": "testBoolean",
-    #     "params": {
-    #         "input": [
-    #             {"value": True},
-    #             {"value": 1, "type": "bool"},
-    #             {"value": 0, "type": "bool"},
-    #         ],
-    #         "output": [{"value": [True, True, False]}],
-    #     },
-    # },
-    # {
-    #     "function": "testFloat",
-    #     "params": {
-    #         "input": [
-    #             {"value": 3.0},
-    #             {"value": 3, "type": "float"},
-    #         ],
-    #         "output": [{"value": [3.0, 3]}],
-    #     },
-    # },
-    # {
-    #     "function": "testVariousTypesAsString",
-    #     "params": {
-    #         "input": [
-    #             {"value": "3.0", "type": "float"},
-    #             {"value": "3", "type": "int"},
-    #         ],
-    #         "output": [{"value": [3.0, 3]}],
-    #     },
-    # },
-    # {
-    #     "params": {
-    #         "input": [],
-    #         "output": [
-    #             {"value": "Function name not passed. default function main is executed"}
-    #         ],
-    #     }
-    # },
-    # {
-    #     "function": "testLinkedList",
-    #     "params": {
-    #         "input": [
-    #             {"value": [1, 2, 3], "type": "linkedlist"},
-    #         ],
-    #         "output": [{"value": [1, 2, 3]}],
-    #     },
-    # },
-    # {
-    #     "function": "testBinaryTreeAsList",
-    #     "params": {
-    #         "input": [
-    #             {"value": [1, 2, 3], "type": "binarytree"},
-    #         ],
-    #         "output": [
-    #             {"value": [2, 4, 6]},
-    #         ],
-    #     },
-    # },
-    # {
-    #     "function": "testBinaryTreeAsList",
-    #     "params": {
-    #         "input": [
-    #             {
-    #                 "value": [1, 2, 3, 4, None, 6, 7, 8, None, None, None, 9, 10],
-    #                 "type": "binarytree",
-    #             },
-    #         ],
-    #         "output": [
-    #             {"value": [2, 4, 6, 8, None, 12, 142, 16, None, None, None, 18, 20]},
-    #         ],
-    #     },
-    # },
-    # {
-    #     "function": "testNone1",
-    #     "params": {
-    #         "input": [{"value": "Hello, World"}],
-    #         "output": [{"value": None}],
-    #     },
-    # },
-    # {
-    #     "function": "testNone2",
-    #     "params": {
-    #         "output": [{"value": None}],
-    #     },
-    # },
-    # {
-    #     "function": "testNone1",
-    #     "params": {
-    #         "input": [{"value": "Hello, World"}],
-    #     },
-    # },
-    # {
-    #     "function": "testNoInputs",
-    #     "params": {"output": [{"value": True}]},
-    # },
-    # {
-    #     "function": "testNoOutputs",
-    #     "params": {"input": [{"value": "Hello, World"}]},
-    # },
+    {
+        "function": "testDynamicInputs",
+        "params": {
+            "input": [
+                {"value": [1, 2, 3]},
+                {"value": [2, 3, 4], "type": "set"},
+                {"value": [4, 5, 6], "type": "tuple"},
+                {"value": 3},
+                {"value": 3, "type": "float"},
+            ],
+            "output": [{"value": [[1, 2, 3], {2, 3, 4}, (4, 5, 6), 3, 3.0]}],
+        },
+    },
+    {
+        "function": "testInt",
+        "params": {
+            "input": [
+                {"value": 3, "type": "float"},
+                {
+                    "value": 3,
+                },
+            ],
+            "output": [{"value": [3.0, 3]}],
+        },
+    },
+    {
+        "function": "testList",
+        "params": {
+            "input": [
+                {"value": [1, 2, 3], "type": "list"},
+            ],
+            "output": [{"value": [1, 2, 3]}],
+        },
+    },
+    {
+        "function": "testSet",
+        "params": {
+            "input": [{"value": [1, 2, 3], "type": "set"}, {"value": {1, 2, 3}}],
+            "output": [{"value": [{1, 2, 3}, {1, 2, 3}]}],
+        },
+    },
+    {
+        "function": "testDict",
+        "params": {
+            "input": [{"value": {"a": 1, "b": 1}}],
+            "output": [{"value": {"a": 1, "b": 1}}],
+        },
+    },
+    {
+        "function": "testTuple",
+        "params": {
+            "input": [{"value": (1, 2, 3)}, {"value": [1, 2, 3], "type": "tuple"}],
+            "output": [{"value": [(1, 2, 3), (1, 2, 3)]}],
+        },
+    },
+    {
+        "function": "testBoolean",
+        "params": {
+            "input": [
+                {"value": True},
+                {"value": 1, "type": "bool"},
+                {"value": 0, "type": "bool"},
+            ],
+            "output": [{"value": [True, True, False]}],
+        },
+    },
+    {
+        "function": "testFloat",
+        "params": {
+            "input": [
+                {"value": 3.0},
+                {"value": 3, "type": "float"},
+            ],
+            "output": [{"value": [3.0, 3]}],
+        },
+    },
+    {
+        "function": "testVariousTypesAsString",
+        "params": {
+            "input": [
+                {"value": "3.0", "type": "float"},
+                {"value": "3", "type": "int"},
+            ],
+            "output": [{"value": [3.0, 3]}],
+        },
+    },
+    {
+        "params": {
+            "input": [],
+            "output": [
+                {"value": "Function name not passed. default function main is executed"}
+            ],
+        }
+    },
+    {
+        "function": "testLinkedList",
+        "params": {
+            "input": [
+                {"value": [1, 2, 3], "type": "linkedlist"},
+            ],
+            "output": [{"value": [1, 2, 3]}],
+        },
+    },
+    {
+        "function": "testBinaryTreeAsList",
+        "params": {
+            "input": [
+                {"value": [1, 2, 3], "type": "binarytree"},
+            ],
+            "output": [
+                {"value": [2, 4, 6]},
+            ],
+        },
+    },
+    {
+        "function": "testBinaryTreeAsList",
+        "params": {
+            "input": [
+                {
+                    "value": [1, 2, 3, 4, None, 6, 7, 8, None, None, None, 9, 10],
+                    "type": "binarytree",
+                },
+            ],
+            "output": [
+                {"value": [2, 4, 6, 8, None, 12, 142, 16, None, None, None, 18, 20]},
+            ],
+        },
+    },
+    {
+        "function": "testNone1",
+        "params": {
+            "input": [{"value": "Hello, World"}],
+            "output": [{"value": None}],
+        },
+    },
+    {
+        "function": "testNone2",
+        "params": {
+            "output": [{"value": None}],
+        },
+    },
+    {
+        "function": "testNone1",
+        "params": {
+            "input": [{"value": "Hello, World"}],
+        },
+    },
+    {
+        "function": "testNoInputs",
+        "params": {"output": [{"value": True}]},
+    },
+    {
+        "function": "testNoOutputs",
+        "params": {"input": [{"value": "Hello, World"}]},
+    },
     {
         "function": "testNoInputsOutputs",
     },
