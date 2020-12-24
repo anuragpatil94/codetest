@@ -110,7 +110,9 @@ class _CodeTest:
             inputParams = (
                 self._containerize(params["input"]) if "input" in params else None
             )
-            outputParams = self._containerize(params["output"])
+            outputParams = (
+                self._containerize(params["output"]) if "output" in params else None
+            )
 
             # Run a test on the function
             sTest = _SingleTest(Problem, function, index, inputParams, outputParams)
@@ -198,28 +200,27 @@ class _SingleTest:
                 inputParams.append(input.value)
 
         # get output
-        expectedOp = self.output[0]
+        expectedOpObj = self.output[0] if self.output is not None else None
 
         # run test
         try:
             DynamicClass = self.cls()
-            testFunction = getattr(DynamicClass, self.fn)
+            fnToExecute = getattr(DynamicClass, self.fn)
         except:
             print("Cannot find method ", self.fn)
 
         start = timer()
-        computedOp = testFunction(*inputParams)
+        computedOp = fnToExecute(*inputParams)
         end = timer()
         totaltime = end - start
-
-        # Find if output needs to be converted
-        convTypeStr, convTypeCls = _Type().getConversionType(
-            computedOp, expectedOp.type
-        )
 
         try:
             # type cast
             if computedOp is not None:
+                # Find if output needs to be converted
+                convTypeStr, convTypeCls = _Type().getConversionType(
+                    computedOp, expectedOpObj.type
+                )
                 computedOp = convTypeCls(computedOp)
         except TypeError as te:
             raise TypeError(
@@ -229,9 +230,12 @@ class _SingleTest:
             )
 
         try:
-            assert computedOp == expectedOp.value
+            expectedOp = None
+            if expectedOpObj is not None:
+                expectedOp = expectedOpObj.value
+            assert computedOp == expectedOp
         except Exception as e:
-            print(self._getErrorMessage(expectedOp.value, computedOp, totaltime))
+            print(self._getErrorMessage(expectedOpObj.value, computedOp, totaltime))
 
     def _execute(self, *args):
         pass
