@@ -21,7 +21,6 @@ DONE: Add Test Cases for set as list
 DONE: Add Test Cases for string
 DONE: Add Test Cases for string as int
 DONE: Add Test Cases for string as float
-TODO: Comments for each function
 DONE: Add Test if the function name is not passed
 """
 
@@ -33,7 +32,7 @@ class Problem:
     def testDynamicInputs(self, arr, setAsArr, tupleAsArr, integerNumber, floatNumber):
         return [arr, setAsArr, tupleAsArr, integerNumber, floatNumber]
 
-    def testInt(self, num1, num2):
+    def testInt(self, num1=3, num2=3):
         return [num1, num2]
 
     def testLinkedList(self, linkedlist):
@@ -42,10 +41,6 @@ class Problem:
         library will convert to array to linkedlist and then pass it to
         the function as a param
         """
-        # arr = []
-        # while linkedlist:
-        #     arr.append(linkedlist.val)
-        #     linkedlist = linkedlist.next
         return linkedlist
 
     def testList(self, l):
@@ -89,6 +84,22 @@ class Problem:
         self.testBinaryTreeAsList(head.right)
         return head
 
+    def testNoInputs(self):
+        return True
+
+    def testNoOutputs(self, x):
+        print(x)
+        pass
+
+    def testNoInputsOutputs(self):
+        pass
+
+    def testNone1(self, x):
+        return None
+
+    def testNone2(self):
+        return None
+
 
 tests = [
     {
@@ -117,12 +128,18 @@ tests = [
         },
     },
     {
+        "function": "testInt",
+        "params": {
+            "output": [{"value": [3, 3]}],
+        },
+    },
+    {
         "function": "testList",
         "params": {
             "input": [
                 {"value": [1, 2, 3], "type": "list"},
             ],
-            "output": [{"value": [1, 2, 3, 4]}],
+            "output": [{"value": [1, 2, 3]}],
         },
     },
     {
@@ -143,14 +160,7 @@ tests = [
         "function": "testTuple",
         "params": {
             "input": [{"value": (1, 2, 3)}, {"value": [1, 2, 3], "type": "tuple"}],
-            "output": [
-                {
-                    "value": [
-                        (1, 2, 3),
-                        (1, 2, 3),
-                    ]
-                }
-            ],
+            "output": [{"value": [(1, 2, 3), (1, 2, 3)]}],
         },
     },
     {
@@ -217,30 +227,46 @@ tests = [
         "params": {
             "input": [
                 {
-                    "value": [
-                        1,
-                        2,
-                        3,
-                        4,
-                        None,
-                        6,
-                        7,
-                        8,
-                        None,
-                        None,
-                        None,
-                        9,
-                        10,
-                    ],
+                    "value": [1, 2, 3, 4, None, 6, 7, 8, None, None, None, 9, 10],
                     "type": "binarytree",
                 },
             ],
             "output": [
-                {"value": [2, 4, 6, 8, None, 12, 142,
-                           16, None, None, None, 18, 20]},
+                {"value": [2, 4, 6, 8, None, 12, 142, 16, None, None, None, 18, 20]},
             ],
         },
     },
+    {
+        "function": "testNone1",
+        "params": {
+            "input": [{"value": "Hello, World"}],
+            "output": [{"value": None}],
+        },
+    },
+    {
+        "function": "testNone2",
+        "params": {
+            "output": [{"value": None}],
+        },
+    },
+    {
+        "function": "testNone1",
+        "params": {
+            "input": [{"value": "Hello, World"}],
+        },
+    },
+    {
+        "function": "testNoInputs",
+        "params": {"output": [{"value": True}]},
+    },
+    {
+        "function": "testNoOutputs",
+        "params": {"input": [{"value": "Hello, World"}]},
+    },
+    {
+        "function": "testNoInputsOutputs",
+    },
+    {},
 ]
 
 # Run Tests

@@ -14,9 +14,15 @@ All notable changes to this project will be documented in this file.
 ## [1.0.1] - 12-22-2020
 
 - Changed
-  - Updated Documetation
-- Deprecated
-- Removed
+  - Updated Documentation
 - Fixed
   - import issue for packages
-- Security
+
+## [1.1.0] - 12-24-2020
+
+- Added
+  - `None` can be passed as input or output
+
+- Changed
+  - More Modular tests all the attributes of the tests are optional
+  - inputs or outputs in the testcase are optional

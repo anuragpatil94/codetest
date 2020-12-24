@@ -1,4 +1,5 @@
 from timeit import default_timer as timer
+
 if __package__:
     from ._utils import _LinkedList, _BinaryTree, _ListNode, _BinaryTreeNode
 else:
@@ -7,8 +8,6 @@ else:
 ####################################################
 #                     I/O OBJECT
 ####################################################
-
-
 class _IOObject:
     def __init__(self, value, type=None, default=None, options={}):
         self.value = value
@@ -106,32 +105,51 @@ class _CodeTest:
             function = test["function"] if "function" in test else "main"
 
             # get input and output params and create list of _IOObject
-            params = test["params"]
-            inputParams = self._containerize(params["input"])
-            outputParams = self._containerize(params["output"])
+            inputParams = None
+            outputParams = None
+            if "params" in test:
+                params = test["params"]
+
+                inputParams = (
+                    self._containerize(params["input"]) if "input" in params else None
+                )
+                outputParams = (
+                    self._containerize(params["output"]) if "output" in params else None
+                )
 
             # Run a test on the function
-            sTest = _SingleTest(Problem, function, index,
-                                inputParams, outputParams)
+            sTest = _SingleTest(Problem, function, index, inputParams, outputParams)
             sTest.run()
 
     def _containerize(self, ios: list) -> list:
         """Creates a list of IOObject containing Input or Output data"""
         Type = _Type()
         arr = []
-        for io in ios:
-            data = io.pop("value")
+        try:
+            for io in ios:
+                data = io.pop("value")
+                convTypeStr = io.pop("type") if "type" in io else None
+                default = io.pop("default") if "default" in io else None
+                options = io
 
-            convTypeStr = io.pop("type") if "type" in io else None
-            convTypeStr, convTypeCls = Type.getConversionType(
-                data, convTypeStr)
+                if data is None:
+                    arr.append(_IOObject(data, None, default, options))
+                    continue
 
-            data = convTypeCls(data)
-            default = io.pop("default") if "default" in io else None
-            options = io
-            obj = _IOObject(data, convTypeStr, default, options)
-            arr.append(obj)
-        return arr
+                convTypeStr, convTypeCls = Type.getConversionType(data, convTypeStr)
+                try:
+                    data = convTypeCls(data)
+                except TypeError as te:
+                    raise TypeError(
+                        "data `{}` cannot be converted to type:`{}`".format(
+                            str(data), convTypeCls
+                        )
+                    )
+                obj = _IOObject(data, convTypeStr, default, options)
+                arr.append(obj)
+            return arr
+        except Exception as e:
+            print(e)
 
     def visualize(self):
         pass
@@ -141,7 +159,7 @@ class _SingleTest:
     def __init__(
         self,
         cls: object,
-        fn: object,
+        fn: str,
         testIndex: int,
         input: [_IOObject],
         output: [_IOObject],
@@ -158,19 +176,19 @@ class _SingleTest:
     def _getOutputArray(self):
         pass
 
-    def _getErrorMessage(self, expectedOutput, actualOutput, time):
+    def _getErrorMessage(self, expectedOutput, computedOutput, time):
+        # Any output here will be in the std type format which can be easily converted to string
         strExpectedOp = str(expectedOutput)
-        strActualOp = str(actualOutput)
+        strComputedOp = str(computedOutput)
 
         minHorizontalLen = 60
 
-        heading = "[TEST {}]".format(
-            str(self.testIndex)).center(minHorizontalLen, "-")
-        txt = """{}\nExpected Output: {}\nActual Output:   {}\n{}\n{}
+        heading = "[TEST {}]".format(str(self.testIndex)).center(minHorizontalLen, "-")
+        txt = """{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
             strExpectedOp,
-            strActualOp,
+            strComputedOp,
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(
                 minHorizontalLen
             ),
@@ -181,33 +199,49 @@ class _SingleTest:
     def run(self):
         # get input list
         inputParams = []
-        for input in self.input:
-            inputParams.append(input.value)
+        if self.input is not None:
+            for input in self.input:
+                inputParams.append(input.value)
 
         # get output
-        expectedOp = self.output[0]
+        expectedOpObj = None
+        if self.output is not None:
+            expectedOpObj = self.output[0]
 
         # run test
         try:
             DynamicClass = self.cls()
-            testFunction = getattr(DynamicClass, self.fn)
+            fnToExecute = getattr(DynamicClass, self.fn)
         except:
             print("Cannot find method ", self.fn)
 
         start = timer()
-        actualOp = testFunction(*inputParams)
+        computedOp = fnToExecute(*inputParams)
         end = timer()
         totaltime = end - start
 
-        convTypeStr, convTypeCls = _Type().getConversionType(actualOp, expectedOp.type)
-
-        # type cast
-        actualOp = convTypeCls(actualOp)
-
         try:
-            assert actualOp == expectedOp.value
+            # type cast
+            if computedOp is not None and expectedOpObj is not None:
+                # Find if output needs to be converted
+                convTypeStr, convTypeCls = _Type().getConversionType(
+                    computedOp, expectedOpObj.type
+                )
+                computedOp = convTypeCls(computedOp)
+        except TypeError as te:
+            raise TypeError(
+                "data `{}` cannot be converted to type:`{}`".format(
+                    str(computedOp), convTypeCls
+                )
+            )
+
+        expectedOp = None
+        if expectedOpObj is not None:
+            expectedOp = expectedOpObj.value
+        try:
+            assert computedOp == expectedOp
         except Exception as e:
-            print(self._getErrorMessage(expectedOp.value, actualOp, totaltime))
+            print(self._getErrorMessage(expectedOp, computedOp, totaltime))
 
     def _execute(self, *args):
         pass

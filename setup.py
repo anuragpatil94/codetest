@@ -16,7 +16,7 @@ classifiers = [
 
 setup(
     name="codetest",
-    version="1.0.1",
+    version="1.1.0",
     description="A testing library for coding problems",
     long_description=long_description,
     long_description_content_type="text/markdown",
