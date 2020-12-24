@@ -106,7 +106,10 @@ class _CodeTest:
 
             # get input and output params and create list of _IOObject
             params = test["params"]
-            inputParams = self._containerize(params["input"])
+
+            inputParams = (
+                self._containerize(params["input"]) if "input" in params else None
+            )
             outputParams = self._containerize(params["output"])
 
             # Run a test on the function
@@ -170,16 +173,16 @@ class _SingleTest:
 
     def _getErrorMessage(self, expectedOutput, computedOutput, time):
         strExpectedOp = str(expectedOutput)
-        strActualOp = str(computedOutput)
+        strComputedOp = str(computedOutput)
 
         minHorizontalLen = 60
 
         heading = "[TEST {}]".format(str(self.testIndex)).center(minHorizontalLen, "-")
-        txt = """{}\nExpected Output: {}\nActual Output:   {}\n{}\n{}
+        txt = """{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
             strExpectedOp,
-            strActualOp,
+            strComputedOp,
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(
                 minHorizontalLen
             ),
@@ -190,8 +193,9 @@ class _SingleTest:
     def run(self):
         # get input list
         inputParams = []
-        for input in self.input:
-            inputParams.append(input.value)
+        if self.input is not None:
+            for input in self.input:
+                inputParams.append(input.value)
 
         # get output
         expectedOp = self.output[0]
