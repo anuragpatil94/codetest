@@ -177,6 +177,7 @@ class _SingleTest:
         pass
 
     def _getErrorMessage(self, expectedOutput, computedOutput, time):
+        # Any output here will be in the std type format which can be easily converted to string
         strExpectedOp = str(expectedOutput)
         strComputedOp = str(computedOutput)
 
@@ -221,7 +222,7 @@ class _SingleTest:
 
         try:
             # type cast
-            if computedOp is not None:
+            if computedOp is not None and expectedOpObj is not None:
                 # Find if output needs to be converted
                 convTypeStr, convTypeCls = _Type().getConversionType(
                     computedOp, expectedOpObj.type
@@ -234,13 +235,13 @@ class _SingleTest:
                 )
             )
 
+        expectedOp = None
+        if expectedOpObj is not None:
+            expectedOp = expectedOpObj.value
         try:
-            expectedOp = None
-            if expectedOpObj is not None:
-                expectedOp = expectedOpObj.value
             assert computedOp == expectedOp
         except Exception as e:
-            print(self._getErrorMessage(expectedOpObj.value, computedOp, totaltime))
+            print(self._getErrorMessage(expectedOp, computedOp, totaltime))
 
     def _execute(self, *args):
         pass

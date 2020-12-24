@@ -260,6 +260,7 @@ tests = [
     {
         "function": "testNoInputsOutputs",
     },
+    {},
 ]
 
 # Run Tests
