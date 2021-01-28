@@ -20,7 +20,7 @@
 ### V2
 
 - Major Features
-    TODO Option to show even if Passed - complete
+    DONE Option to show even if Passed - complete
     TODO PASS/FAIL Strip
     TODO Run tests one by one (generators)
     TODO Show Passed or Failed Message for each Test

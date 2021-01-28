@@ -270,4 +270,4 @@ tests = [
 ]
 
 # Run Tests
-CodeTest(tests, Problem)
+CodeTest(tests, Problem, {"messages": {"onlyFailed": False}})

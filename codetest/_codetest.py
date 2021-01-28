@@ -122,7 +122,9 @@ class _CodeTest:
                 )
 
             # Run a test on the function
-            sTest = _SingleTest(Problem, function, index, inputParams, outputParams)
+            sTest = _SingleTest(
+                Problem, function, index, inputParams, outputParams, self.options
+            )
             sTest.run()
 
     def _containerize(self, ios: list) -> list:
@@ -170,12 +172,14 @@ class _SingleTest:
         testIndex: int,
         input: [_IOObject],
         output: [_IOObject],
+        options,
     ):
         self.cls = cls
         self.fn = fn
         self.testIndex = testIndex
         self.input = input
         self.output = output
+        self.options = options
 
     def _getInputArray(self):
         pass
@@ -185,7 +189,9 @@ class _SingleTest:
 
     def _getMessage(self, expectedOutput=None, computedOutput=None, time=""):
         return {
-            "success": self._getSuccessMessage(time),
+            "success": self._getSuccessMessage(time)
+            if not self.options["messages"].get("onlyFailed", False)
+            else None,
             "failed": self._getErrorMessage(expectedOutput, computedOutput, time),
         }
 
@@ -283,9 +289,11 @@ class _SingleTest:
             expectedOp = expectedOpObj.value
         try:
             assert computedOp == expectedOp
-            print(self._getSuccessMessage(totaltime))
+            message = self._getMessage(time=totaltime)["success"]
+            if message is not None:
+                print(message)
         except Exception as e:
-            print(self._getErrorMessage(expectedOp, computedOp, totaltime))
+            print(self._getMessage(expectedOp, computedOp, totaltime)["failed"])
 
     def _execute(self, *args):
         pass
