@@ -20,7 +20,8 @@
 ### V2
 
 - Major Features
-    TODO Option to show even if Passed - complete or a single line
+    TODO Option to show even if Passed - complete
+    TODO PASS/FAIL Strip
     TODO Run tests one by one (generators)
     TODO Show Passed or Failed Message for each Test
     TODO More Flexible Type names like str can be string or str. Case Independent
@@ -28,6 +29,7 @@
     TODO Show Execution Analytics
     TODO Show Error List
     TODO Show Stacktrace Option
+    TODO Script to test for multiple python version
 
 ### V3
 
