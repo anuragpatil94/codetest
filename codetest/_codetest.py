@@ -200,7 +200,15 @@ class _SingleTest:
                 "{}SUCCESS{}".format(bcolors.OKGREEN, bcolors.ENDC).rjust(resLen, "-"),
             ]
         )
-        txt = """{}\n""".format(heading)
+
+        # Revised len for ending horizontal line
+        # -9 because ENDC takes 5 char space and Color takes 4 char spaces
+        revisedLen = mLen + resLen - 9
+        txt = """{}\n{}""".format(
+            heading,
+            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
+            "".center(revisedLen, "-"),
+        )
         return txt
 
     def _getErrorMessage(self, expectedOutput, computedOutput, time):
@@ -218,15 +226,16 @@ class _SingleTest:
                 "{}FAILED{}".format(bcolors.FAIL, bcolors.ENDC).rjust(resLen, "-"),
             ]
         )
-
+        # Revised len for ending horizontal line
         # -9 because ENDC takes 5 char space and Color takes 4 char spaces
+        revisedLen = mLen + resLen - 9
         txt = """{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
             strExpectedOp,
             strComputedOp,
-            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(mLen),
-            "".center(mLen + resLen - 9, "-"),
+            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
+            "".center(revisedLen, "-"),
         )
         return txt
 
