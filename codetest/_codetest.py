@@ -93,9 +93,13 @@ class _Type:
             )
 
 
+####################################################
+#                     CODETEST LIB
+####################################################
 class _CodeTest:
-    def __init__(self, tests: list) -> None:
+    def __init__(self, tests: list, options) -> None:
         self.tests = tests
+        self.options = options
 
     def run(self, Problem: object):
 
@@ -155,6 +159,9 @@ class _CodeTest:
         pass
 
 
+####################################################
+#                     SINGLETEST
+####################################################
 class _SingleTest:
     def __init__(
         self,
@@ -176,23 +183,50 @@ class _SingleTest:
     def _getOutputArray(self):
         pass
 
+    def _getMessage(self, expectedOutput=None, computedOutput=None, time=""):
+        return {
+            "success": self._getSuccessMessage(time),
+            "failed": self._getErrorMessage(expectedOutput, computedOutput, time),
+        }
+
+    def _getSuccessMessage(self, time):
+        # Minimum Length of Horizontal Line
+        mLen = 60
+        resLen = 20
+
+        heading = "".join(
+            [
+                "[TEST {}]".format(str(self.testIndex)).center(mLen, "-"),
+                "{}SUCCESS{}".format(bcolors.OKGREEN, bcolors.ENDC).rjust(resLen, "-"),
+            ]
+        )
+        txt = """{}\n""".format(heading)
+        return txt
+
     def _getErrorMessage(self, expectedOutput, computedOutput, time):
         # Any output here will be in the std type format which can be easily converted to string
         strExpectedOp = str(expectedOutput)
         strComputedOp = str(computedOutput)
 
-        minHorizontalLen = 60
+        # Minimum Length of Horizontal Line
+        mLen = 60
+        resLen = 20
 
-        heading = "[TEST {}]".format(str(self.testIndex)).center(minHorizontalLen, "-")
+        heading = "".join(
+            [
+                "[TEST {}]".format(str(self.testIndex)).center(mLen, "-"),
+                "{}FAILED{}".format(bcolors.FAIL, bcolors.ENDC).rjust(resLen, "-"),
+            ]
+        )
+
+        # -9 because ENDC takes 5 char space and Color takes 4 char spaces
         txt = """{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
             strExpectedOp,
             strComputedOp,
-            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(
-                minHorizontalLen
-            ),
-            "".center(minHorizontalLen, "-"),
+            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(mLen),
+            "".center(mLen + resLen - 9, "-"),
         )
         return txt
 
@@ -240,8 +274,29 @@ class _SingleTest:
             expectedOp = expectedOpObj.value
         try:
             assert computedOp == expectedOp
+            print(self._getSuccessMessage(totaltime))
         except Exception as e:
             print(self._getErrorMessage(expectedOp, computedOp, totaltime))
 
     def _execute(self, *args):
         pass
+
+
+####################################################
+#                     COLORS
+####################################################
+class bcolors:
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+
+    def disable(self):
+        self.HEADER = ""
+        self.OKBLUE = ""
+        self.OKGREEN = ""
+        self.WARNING = ""
+        self.FAIL = ""
+        self.ENDC = ""

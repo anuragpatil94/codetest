@@ -10,7 +10,7 @@ A simple library to run multiple tests on the written coding problem
 # PUBLIC INTERFACE
 
 
-def CodeTest(tests: list, cls: object):
+def CodeTest(tests: list, cls: object, options={}):
     """Pass a list of tests and code class as param to run the tests
 
     Args:
@@ -50,5 +50,5 @@ def CodeTest(tests: list, cls: object):
     8. `linkedlist`
     9. `binarytree`
     """
-    codetest = _CodeTest(tests)
+    codetest = _CodeTest(tests, options)
     codetest.run(cls)

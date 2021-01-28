@@ -88,7 +88,7 @@ class Problem:
         return True
 
     def testNoOutputs(self, x):
-        print(x)
+        # print(x)
         pass
 
     def testNoInputsOutputs(self):
