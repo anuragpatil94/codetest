@@ -133,8 +133,13 @@ class _CodeTest:
                 self.messages.append(messageObj)
                 # if showDetails is True
                 if self.options.get("showDetails", False) == True:
-                    print(messageObj["message"])
-
+                    if (
+                        self.options["messages"].get("onlyFailed", False) == True
+                        and not messageObj["success"]
+                    ):
+                        print(messageObj["message"])
+                    if self.options["messages"].get("onlyFailed", False) == False:
+                        print(messageObj["message"])
         if self.options.get("showDetails", False) == False:
             print("".join([obj["message"] for obj in self.messages]))
 
@@ -201,9 +206,7 @@ class _SingleTest:
     def _getMessage(self, expectedOutput=None, computedOutput=None, time=""):
 
         return {
-            "success": self._getSuccessMessage(time)
-            if not self.options["messages"].get("onlyFailed", False)
-            else None,
+            "success": self._getSuccessMessage(time),
             "failed": self._getErrorMessage(expectedOutput, computedOutput, time),
         }
 
@@ -240,7 +243,7 @@ class _SingleTest:
     def _getErrorMessage(self, expectedOutput, computedOutput, time):
         if self.options.get("showDetails", False) == False:
             return {
-                "success": True,
+                "success": False,
                 "message": "{}F{}".format(bcolors.FAIL, bcolors.ENDC),
             }
 
@@ -270,7 +273,7 @@ class _SingleTest:
             "".center(revisedLen, "-"),
         )
         return {
-            "success": True,
+            "success": False,
             "message": txt,
         }
 
