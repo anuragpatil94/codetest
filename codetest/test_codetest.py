@@ -168,7 +168,7 @@ tests = [
         "params": {
             "input": [
                 {"value": True},
-                {"value": 1, "type": "bool"},
+                {"value": 1, "type": "boolean"},
                 {"value": 0, "type": "bool"},
             ],
             "output": [{"value": [True, True, False]}],

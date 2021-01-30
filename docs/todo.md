@@ -21,10 +21,10 @@
 
 - Major Features
     DONE Option to show even if Passed - complete
-    TODO PASS/FAIL Strip
-    TODO Run tests one by one (generators)
-    TODO Show Passed or Failed Message for each Test
-    TODO More Flexible Type names like str can be string or str. Case Independent
+    DONE PASS/FAIL Strip
+    DONE Run tests one by one (generators)
+    DONE Show Passed or Failed Message for each Test
+    DONE More Flexible Type names like str can be string or str. Case Independent
     TODO Test Description
     TODO Show Execution Analytics
     TODO Show Error List

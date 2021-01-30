@@ -33,7 +33,7 @@ class _Type:
     def __init__(self):
         pass
 
-    def getDefaultTypeAsClass(self, typeAsString):
+    def getDefaultTypeAsClass(self, typeAsString: str):
         defaultTypes = {
             "int": int,
             "float": float,
@@ -42,16 +42,18 @@ class _Type:
             "dict": dict,
             "set": set,
             "bool": bool,
+            "boolean": bool,
             "str": str,
+            "string": str,
         }
-        return defaultTypes.get(typeAsString, None)
+        return defaultTypes.get(typeAsString.lower(), None)
 
-    def getCustomTypeAsClass(self, typeAsString):
+    def getCustomTypeAsClass(self, typeAsString: str):
         customTypes = {
             "linkedlist": _LinkedList,
             "binarytree": _BinaryTree,
         }
-        return customTypes.get(typeAsString, None)
+        return customTypes.get(typeAsString.lower(), None)
 
     def getTypeAsString(self, data) -> str:
         if isinstance(data, int):
