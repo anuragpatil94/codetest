@@ -26,12 +26,14 @@
     DONE Show Passed or Failed Message for each Test
     DONE More Flexible Type names like str can be string or str. Case Independent
     DONE Test Description
-    DONE Show Execution Analytics
-    TODO Show Error List
-    TODO Show Stacktrace Option
     TODO Script to test for multiple python version
 
 ### V3
+
+- Major Features
+    TODO Update the options object with new structure.
+
+### V4
 
     TODO Add Support for Tree
     TODO Add Test Cases for tree as dict
@@ -42,3 +44,5 @@
     TODO Add support for JSON as param
     TODO Support More than one output
     TODO Visualization
+    TODO Show Error List
+    TODO Show Stacktrace Option
