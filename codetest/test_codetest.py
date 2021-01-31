@@ -274,5 +274,5 @@ tests = [
 CodeTest(
     tests,
     Problem,
-    {"showDescription": True, "showDetails": True, "messages": {"onlyFailed": False}},
+    {"showDescription": True, "showDetails": True, "messages": {"onlyFailed": True}},
 )

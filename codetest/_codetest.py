@@ -241,9 +241,11 @@ class _SingleTest:
         # Revised len for ending horizontal line
         # -9 because ENDC takes 5 char space and Color takes 4 char spaces
         revisedLen = mLen + resLen - 9
-        txt = """{}\nTest Description: {}\n{}\n{}""".format(
+        txt = """{}{}\n{}\n{}""".format(
             heading,
-            self.description,
+            "\nTest Description: {}".format(self.description)
+            if self.options.get("showDescription", False) == True
+            else "",
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
             "".center(revisedLen, "-"),
         )
@@ -276,10 +278,12 @@ class _SingleTest:
         # Revised len for ending horizontal line
         # -9 because ENDC takes 5 char space and Color takes 4 char spaces
         revisedLen = mLen + resLen - 9
-        txt = """{}\nTest Description: {}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
+        txt = """{}{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
-            self.description,
+            "\nTest Description: {}".format(self.description)
+            if self.options.get("showDescription", False) == True
+            else "",
             strExpectedOp,
             strComputedOp,
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
