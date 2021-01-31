@@ -110,6 +110,7 @@ class _CodeTest:
         for index, test in enumerate(self.tests):
             # function to test
             function = test["function"] if "function" in test else "main"
+            description = test.get("description", function)
 
             # get input and output params and create list of _IOObject
             inputParams = None
@@ -126,7 +127,13 @@ class _CodeTest:
 
             # Run a test on the function
             sTest = _SingleTest(
-                Problem, function, index, inputParams, outputParams, self.options
+                Problem,
+                function,
+                description,
+                index,
+                inputParams,
+                outputParams,
+                self.options,
             )
             # returns a PASS/FAIL Message
             messageObj = sTest.run()
@@ -187,6 +194,7 @@ class _SingleTest:
         self,
         cls: object,
         fn: str,
+        description: str,
         testIndex: int,
         input: [_IOObject],
         output: [_IOObject],
@@ -194,6 +202,7 @@ class _SingleTest:
     ):
         self.cls = cls
         self.fn = fn
+        self.description = description
         self.testIndex = testIndex
         self.input = input
         self.output = output
@@ -232,8 +241,9 @@ class _SingleTest:
         # Revised len for ending horizontal line
         # -9 because ENDC takes 5 char space and Color takes 4 char spaces
         revisedLen = mLen + resLen - 9
-        txt = """{}\n{}""".format(
+        txt = """{}\nTest Description: {}\n{}\n{}""".format(
             heading,
+            self.description,
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
             "".center(revisedLen, "-"),
         )
@@ -266,9 +276,10 @@ class _SingleTest:
         # Revised len for ending horizontal line
         # -9 because ENDC takes 5 char space and Color takes 4 char spaces
         revisedLen = mLen + resLen - 9
-        txt = """{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
+        txt = """{}\nTest Description: {}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
+            self.description,
             strExpectedOp,
             strComputedOp,
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),

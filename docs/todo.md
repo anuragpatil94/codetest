@@ -25,7 +25,7 @@
     DONE Run tests one by one (generators)
     DONE Show Passed or Failed Message for each Test
     DONE More Flexible Type names like str can be string or str. Case Independent
-    TODO Test Description
+    DONE Test Description
     TODO Show Execution Analytics
     TODO Show Error List
     TODO Show Stacktrace Option
