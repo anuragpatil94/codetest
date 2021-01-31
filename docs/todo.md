@@ -27,7 +27,7 @@
     DONE More Flexible Type names like str can be string or str. Case Independent
     DONE Test Description
     DONE Show Execution Analytics
-    DONE Show Error List
+    TODO Show Error List
     TODO Show Stacktrace Option
     TODO Script to test for multiple python version
 
