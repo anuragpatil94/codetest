@@ -1,5 +1,7 @@
 from timeit import default_timer as timer
 
+# import traceback
+
 if __package__:
     from ._utils import _LinkedList, _BinaryTree, _ListNode, _BinaryTreeNode
 else:
@@ -209,7 +211,7 @@ class _SingleTest:
 
         return {
             "success": self._getSuccessMessage(time),
-            "failed": self._getErrorMessage(expectedOutput, computedOutput, time),
+            "failed": self._getFailedMessage(expectedOutput, computedOutput, time),
         }
 
     def _getSuccessMessage(self, time):
@@ -242,7 +244,7 @@ class _SingleTest:
             "message": txt,
         }
 
-    def _getErrorMessage(self, expectedOutput, computedOutput, time):
+    def _getFailedMessage(self, expectedOutput, computedOutput, time):
         if self.options.get("showDetails", False) == False:
             return {
                 "success": False,
@@ -299,7 +301,11 @@ class _SingleTest:
             print("Cannot find method ", self.fn)
 
         start = timer()
-        computedOp = fnToExecute(*inputParams)
+        try:
+            computedOp = fnToExecute(*inputParams)
+        except Exception as e:
+            print(str(e))
+            # just_the_string = traceback.format_exc()
         end = timer()
         totaltime = end - start
 
