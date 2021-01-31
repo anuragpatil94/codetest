@@ -33,7 +33,7 @@ class _Type:
     def __init__(self):
         pass
 
-    def getDefaultTypeAsClass(self, typeAsString):
+    def getDefaultTypeAsClass(self, typeAsString: str):
         defaultTypes = {
             "int": int,
             "float": float,
@@ -42,16 +42,18 @@ class _Type:
             "dict": dict,
             "set": set,
             "bool": bool,
+            "boolean": bool,
             "str": str,
+            "string": str,
         }
-        return defaultTypes.get(typeAsString, None)
+        return defaultTypes.get(typeAsString.lower(), None)
 
-    def getCustomTypeAsClass(self, typeAsString):
+    def getCustomTypeAsClass(self, typeAsString: str):
         customTypes = {
             "linkedlist": _LinkedList,
             "binarytree": _BinaryTree,
         }
-        return customTypes.get(typeAsString, None)
+        return customTypes.get(typeAsString.lower(), None)
 
     def getTypeAsString(self, data) -> str:
         if isinstance(data, int):
@@ -93,9 +95,14 @@ class _Type:
             )
 
 
+####################################################
+#                     CODETEST LIB
+####################################################
 class _CodeTest:
-    def __init__(self, tests: list) -> None:
+    def __init__(self, tests: list, options: dict) -> None:
         self.tests = tests
+        self.options = options
+        self.messages = []
 
     def run(self, Problem: object):
 
@@ -118,8 +125,25 @@ class _CodeTest:
                 )
 
             # Run a test on the function
-            sTest = _SingleTest(Problem, function, index, inputParams, outputParams)
-            sTest.run()
+            sTest = _SingleTest(
+                Problem, function, index, inputParams, outputParams, self.options
+            )
+            # returns a PASS/FAIL Message
+            messageObj = sTest.run()
+
+            if messageObj is not None:
+                self.messages.append(messageObj)
+                # if showDetails is True
+                if self.options.get("showDetails", False) == True:
+                    if (
+                        self.options["messages"].get("onlyFailed", False) == True
+                        and not messageObj["success"]
+                    ):
+                        print(messageObj["message"])
+                    if self.options["messages"].get("onlyFailed", False) == False:
+                        print(messageObj["message"])
+        if self.options.get("showDetails", False) == False:
+            print("".join([obj["message"] for obj in self.messages]))
 
     def _containerize(self, ios: list) -> list:
         """Creates a list of IOObject containing Input or Output data"""
@@ -155,6 +179,9 @@ class _CodeTest:
         pass
 
 
+####################################################
+#                     SINGLETEST
+####################################################
 class _SingleTest:
     def __init__(
         self,
@@ -163,12 +190,14 @@ class _SingleTest:
         testIndex: int,
         input: [_IOObject],
         output: [_IOObject],
+        options: dict,
     ):
         self.cls = cls
         self.fn = fn
         self.testIndex = testIndex
         self.input = input
         self.output = output
+        self.options = options
 
     def _getInputArray(self):
         pass
@@ -176,25 +205,79 @@ class _SingleTest:
     def _getOutputArray(self):
         pass
 
+    def _getMessage(self, expectedOutput=None, computedOutput=None, time=""):
+
+        return {
+            "success": self._getSuccessMessage(time),
+            "failed": self._getErrorMessage(expectedOutput, computedOutput, time),
+        }
+
+    def _getSuccessMessage(self, time):
+        if self.options.get("showDetails", False) == False:
+            return {
+                "success": True,
+                "message": "{}S{}".format(bcolors.OKGREEN, bcolors.ENDC),
+            }
+        # Minimum Length of Horizontal Line
+        mLen = 60
+        resLen = 20
+
+        heading = "".join(
+            [
+                "[TEST {}]".format(str(self.testIndex)).center(mLen, "-"),
+                "{}SUCCESS{}".format(bcolors.OKGREEN, bcolors.ENDC).rjust(resLen, "-"),
+            ]
+        )
+
+        # Revised len for ending horizontal line
+        # -9 because ENDC takes 5 char space and Color takes 4 char spaces
+        revisedLen = mLen + resLen - 9
+        txt = """{}\n{}""".format(
+            heading,
+            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
+            "".center(revisedLen, "-"),
+        )
+        return {
+            "success": True,
+            "message": txt,
+        }
+
     def _getErrorMessage(self, expectedOutput, computedOutput, time):
+        if self.options.get("showDetails", False) == False:
+            return {
+                "success": False,
+                "message": "{}F{}".format(bcolors.FAIL, bcolors.ENDC),
+            }
+
         # Any output here will be in the std type format which can be easily converted to string
         strExpectedOp = str(expectedOutput)
         strComputedOp = str(computedOutput)
 
-        minHorizontalLen = 60
+        # Minimum Length of Horizontal Line
+        mLen = 60
+        resLen = 20
 
-        heading = "[TEST {}]".format(str(self.testIndex)).center(minHorizontalLen, "-")
+        heading = "".join(
+            [
+                "[TEST {}]".format(str(self.testIndex)).center(mLen, "-"),
+                "{}FAILED{}".format(bcolors.FAIL, bcolors.ENDC).rjust(resLen, "-"),
+            ]
+        )
+        # Revised len for ending horizontal line
+        # -9 because ENDC takes 5 char space and Color takes 4 char spaces
+        revisedLen = mLen + resLen - 9
         txt = """{}\nExpected Output: {}\nComputed Output: {}\n{}\n{}
         """.format(
             heading,
             strExpectedOp,
             strComputedOp,
-            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(
-                minHorizontalLen
-            ),
-            "".center(minHorizontalLen, "-"),
+            str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
+            "".center(revisedLen, "-"),
         )
-        return txt
+        return {
+            "success": False,
+            "message": txt,
+        }
 
     def run(self):
         # get input list
@@ -240,8 +323,29 @@ class _SingleTest:
             expectedOp = expectedOpObj.value
         try:
             assert computedOp == expectedOp
+            return self._getMessage(time=totaltime)["success"]
         except Exception as e:
-            print(self._getErrorMessage(expectedOp, computedOp, totaltime))
+            return self._getMessage(expectedOp, computedOp, totaltime)["failed"]
 
     def _execute(self, *args):
         pass
+
+
+####################################################
+#                     COLORS
+####################################################
+class bcolors:
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+
+    def disable(self):
+        self.HEADER = ""
+        self.OKBLUE = ""
+        self.OKGREEN = ""
+        self.WARNING = ""
+        self.FAIL = ""
+        self.ENDC = ""

@@ -88,7 +88,7 @@ class Problem:
         return True
 
     def testNoOutputs(self, x):
-        print(x)
+        # print(x)
         pass
 
     def testNoInputsOutputs(self):
@@ -168,7 +168,7 @@ tests = [
         "params": {
             "input": [
                 {"value": True},
-                {"value": 1, "type": "bool"},
+                {"value": 1, "type": "boolean"},
                 {"value": 0, "type": "bool"},
             ],
             "output": [{"value": [True, True, False]}],
@@ -270,4 +270,4 @@ tests = [
 ]
 
 # Run Tests
-CodeTest(tests, Problem)
+CodeTest(tests, Problem, {"showDetails": False, "messages": {"onlyFailed": False}})
