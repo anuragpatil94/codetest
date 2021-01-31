@@ -104,6 +104,7 @@ class Problem:
 tests = [
     {
         "function": "testDynamicInputs",
+        "description": "Test to check params of various types passed to the function",
         "params": {
             "input": [
                 {"value": [1, 2, 3]},
@@ -270,4 +271,8 @@ tests = [
 ]
 
 # Run Tests
-CodeTest(tests, Problem, {"showDetails": False, "messages": {"onlyFailed": False}})
+CodeTest(
+    tests,
+    Problem,
+    {"showDescription": True, "showDetails": True, "messages": {"onlyFailed": True}},
+)
