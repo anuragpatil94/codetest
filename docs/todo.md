@@ -26,7 +26,7 @@
     DONE Show Passed or Failed Message for each Test
     DONE More Flexible Type names like str can be string or str. Case Independent
     DONE Test Description
-    TODO Script to test for multiple python version
+    DONE Script to test for multiple python version
 
 ### V3
 
