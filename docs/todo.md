@@ -2,7 +2,7 @@
 
 ## Version
 
-### V1 (current)
+### V1
 
     DONE Takes any number of variables as the input
     DONE Add Support for LinkedList
@@ -10,27 +10,26 @@
     DONE Time to run function
     DONE Custom return feature when used or default return for tests
 
-### V1.1.0
+### V1.1.0 (current)
 
-- Major Features
     DONE Support None Type
     DONE Empty Test
     DONE Test without input or output
 
 ### V2
 
-- Major Features
     DONE Option to show even if Passed - complete
-    DONE PASS/FAIL Strip
     DONE Run tests one by one (generators)
     DONE Show Passed or Failed Message for each Test
     DONE More Flexible Type names like str can be string or str. Case Independent
     DONE Test Description
     DONE Script to test for multiple python version
+    TODO PASS/FAIL Strip
+    TODO if function not specified then library will look for 'main' function. if main not found, the library will apply test to all the functions starting with `solution_`.
+    TODO if function specified and not found 'Handle this error'
 
 ### V3
 
-- Major Features
     TODO Update the options object with new structure.
 
 ### V4
