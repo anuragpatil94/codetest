@@ -100,58 +100,114 @@ class _Type:
 ####################################################
 #                     CODETEST LIB
 ####################################################
-class _CodeTest:
+class _Options:
+    def __init__(self, options):
+        self.ONLY_FAILED = (
+            options["messages"]["onlyFailed"]
+            if "messages" in options and "onlyFailed" in options["messages"]
+            else False
+        )
+        self.SHOW_DESCRIPTION = (
+            options["showDescription"] if "showDescription" in options else False
+        )
+        self.SHOW_DETAILS = (
+            options["showDetails"] if "showDetails" in options else False
+        )
+
+
+class _CodeTest(_Options):
     def __init__(self, tests: list, options: dict) -> None:
         self.tests = tests
         self.options = options
+        super().__init__(options)
         self.messages = []
 
     def run(self, Problem: object):
+        """runs tests on class
+
+        Args:
+            Problem (object): The class in which the function is written.
+        """
 
         # For each test get input and outputs
         for index, test in enumerate(self.tests):
-            # function to test
-            function = test["function"] if "function" in test else "main"
-            description = test.get("description", function)
+            # Get function or list of functions for testing
+            functions = self._getMethodList(Problem, test)
+            inputParams, outputParams = self._getTestParams(test)
+            description = test.get("description")
 
-            # get input and output params and create list of _IOObject
-            inputParams = None
-            outputParams = None
-            if "params" in test:
-                params = test["params"]
-
-                inputParams = (
-                    self._containerize(params["input"]) if "input" in params else None
+            for function in functions:
+                # Run a test on the function
+                sTest = _SingleTest(
+                    Problem,
+                    function,
+                    description,
+                    index,
+                    inputParams,
+                    outputParams,
+                    self.options,
                 )
-                outputParams = (
-                    self._containerize(params["output"]) if "output" in params else None
-                )
+                # returns a PASS/FAIL Message
+                messageObj = sTest.run()
 
-            # Run a test on the function
-            sTest = _SingleTest(
-                Problem,
-                function,
-                description,
-                index,
-                inputParams,
-                outputParams,
-                self.options,
+                self._printMessage(messageObj)
+
+    def _getMethodList(self, Problem, test):
+        """[summary]
+
+        Args:
+            Problem (object): class instance
+            test (dict): contains single test object
+
+        Raises:
+            Exception: if method not defined in the class
+
+        Returns:
+            list: list fo method names in the class
+        """
+        functions = []
+        method_list = set([m for m in dir(Problem) if m.startswith("__") is False])
+        if "function" in test:
+            if test["function"] not in method_list:
+                raise Exception("method not found")
+            functions.append(test["function"])
+        else:
+            if "main" in method_list:
+                functions.append("main")
+            else:
+                functions = list(
+                    filter(
+                        lambda x: x.startswith("solution"),
+                        method_list,
+                    )
+                )
+        return functions
+
+    def _getTestParams(self, test):
+        # get input and output params and create list of _IOObject
+        inputParams = None
+        outputParams = None
+        if "params" in test:
+            params = test["params"]
+
+            inputParams = (
+                self._containerize(params["input"]) if "input" in params else None
             )
-            # returns a PASS/FAIL Message
-            messageObj = sTest.run()
+            outputParams = (
+                self._containerize(params["output"]) if "output" in params else None
+            )
+        return inputParams, outputParams
 
-            if messageObj is not None:
-                self.messages.append(messageObj)
-                # if showDetails is True
-                if self.options.get("showDetails", False) == True:
-                    if (
-                        self.options["messages"].get("onlyFailed", False) == True
-                        and not messageObj["success"]
-                    ):
-                        print(messageObj["message"])
-                    if self.options["messages"].get("onlyFailed", False) == False:
-                        print(messageObj["message"])
-        if self.options.get("showDetails", False) == False:
+    def _printMessage(self, messageObj):
+        if messageObj is not None:
+            self.messages.append(messageObj)
+            # if showDetails is True
+            if self.SHOW_DETAILS is True:
+                if self.ONLY_FAILED is True and not messageObj["success"]:
+                    print(messageObj["message"])
+                if self.ONLY_FAILED is False:
+                    print(messageObj["message"])
+        if self.SHOW_DETAILS is False:
             print("".join([obj["message"] for obj in self.messages]))
 
     def _containerize(self, ios: list) -> list:
@@ -191,7 +247,7 @@ class _CodeTest:
 ####################################################
 #                     SINGLETEST
 ####################################################
-class _SingleTest:
+class _SingleTest(_Options):
     def __init__(
         self,
         cls: object,
@@ -208,7 +264,7 @@ class _SingleTest:
         self.testIndex = testIndex
         self.input = input
         self.output = output
-        self.options = options
+        super().__init__(options)
 
     def _getInputArray(self):
         pass
@@ -224,10 +280,10 @@ class _SingleTest:
         }
 
     def _getSuccessMessage(self, time):
-        if self.options.get("showDetails", False) == False:
+        if self.SHOW_DETAILS is False:
             return {
                 "success": True,
-                "message": "{}S{}".format(bcolors.OKGREEN, bcolors.ENDC),
+                "message": "{}S{}".format(_BColors.OKGREEN, _BColors.ENDC),
             }
         # Minimum Length of Horizontal Line
         mLen = 60
@@ -236,7 +292,9 @@ class _SingleTest:
         heading = "".join(
             [
                 "[TEST {}]".format(str(self.testIndex)).center(mLen, "-"),
-                "{}SUCCESS{}".format(bcolors.OKGREEN, bcolors.ENDC).rjust(resLen, "-"),
+                "{}SUCCESS{}".format(_BColors.OKGREEN, _BColors.ENDC).rjust(
+                    resLen, "-"
+                ),
             ]
         )
 
@@ -246,7 +304,7 @@ class _SingleTest:
         txt = """{}{}\n{}\n{}""".format(
             heading,
             "\nTest Description: {}".format(self.description)
-            if self.options.get("showDescription", False) == True
+            if self.SHOW_DESCRIPTION == True
             else "",
             str(("[Time: " + str(round(time * 1000, 3))) + "ms]").rjust(revisedLen),
             "".center(revisedLen, "-"),
@@ -257,10 +315,10 @@ class _SingleTest:
         }
 
     def _getFailedMessage(self, expectedOutput, computedOutput, time):
-        if self.options.get("showDetails", False) == False:
+        if self.SHOW_DETAILS == False:
             return {
                 "success": False,
-                "message": "{}F{}".format(bcolors.FAIL, bcolors.ENDC),
+                "message": "{}F{}".format(_BColors.FAIL, _BColors.ENDC),
             }
 
         # Any output here will be in the std type format which can be easily converted to string
@@ -274,7 +332,7 @@ class _SingleTest:
         heading = "".join(
             [
                 "[TEST {}]".format(str(self.testIndex)).center(mLen, "-"),
-                "{}FAILED{}".format(bcolors.FAIL, bcolors.ENDC).rjust(resLen, "-"),
+                "{}FAILED{}".format(_BColors.FAIL, _BColors.ENDC).rjust(resLen, "-"),
             ]
         )
         # Revised len for ending horizontal line
@@ -284,7 +342,7 @@ class _SingleTest:
         """.format(
             heading,
             "\nTest Description: {}".format(self.description)
-            if self.options.get("showDescription", False) == True
+            if self.SHOW_DESCRIPTION == True
             else "",
             strExpectedOp,
             strComputedOp,
@@ -355,7 +413,7 @@ class _SingleTest:
 ####################################################
 #                     COLORS
 ####################################################
-class bcolors:
+class _BColors:
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
     OKGREEN = "\033[92m"

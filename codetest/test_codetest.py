@@ -32,6 +32,9 @@ class Problem:
     def testDynamicInputs(self, arr, setAsArr, tupleAsArr, integerNumber, floatNumber):
         return [arr, setAsArr, tupleAsArr, integerNumber, floatNumber]
 
+    def solution_1(self, hello="hello"):
+        return "hello"
+
     def testInt(self, num1=3, num2=3):
         return [num1, num2]
 
@@ -114,6 +117,13 @@ tests = [
                 {"value": 3, "type": "float"},
             ],
             "output": [{"value": [[1, 2, 3], {2, 3, 4}, (4, 5, 6), 3, 3.0]}],
+        },
+    },
+    {
+        "description": "Test for function starting with `solution`",
+        "params": {
+            "input": [],
+            "output": [{"value": "hello"}],
         },
     },
     {
@@ -274,5 +284,11 @@ tests = [
 CodeTest(
     tests,
     Problem,
-    {"showDescription": True, "showDetails": True, "messages": {"onlyFailed": True}},
+    {
+        "showDescription": True,
+        "showDetails": True,
+        "messages": {
+            "onlyFailed": False,
+        },
+    },
 )
