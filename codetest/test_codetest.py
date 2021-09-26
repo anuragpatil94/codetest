@@ -286,7 +286,7 @@ CodeTest(
     Problem,
     {
         "showDescription": True,
-        "showDetails": True,
+        "showDetails": False,
         "messages": {
             "onlyFailed": False,
         },

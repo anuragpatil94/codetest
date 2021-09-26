@@ -8,6 +8,140 @@ else:
     from _utils import _LinkedList, _BinaryTree, _ListNode, _BinaryTreeNode
 
 ####################################################
+#                     TEST MODEL
+####################################################
+class Test:
+    def __init__(self, cls, test):
+        self.cls = cls
+
+        self.validate(test)
+
+        self.function = self._getFunctions(test)
+        self.params = self._getTestParams(test)
+        self.description = description
+
+    def _getFunctionList(self):
+        function_list = set([m for m in dir(self.cls) if m.startswith("__") is False])
+
+    def _getFunctions(self, test):
+        functions = []
+        functionList = self._getFunctionList()
+        if "function" in test:
+            function = test["function"]
+            if function not in functionList:
+                raise Exception(f"function '{function}' not found.")
+            if isinstance(function, str):
+                raise TypeError(f"function should be of type string")
+            functions.append("function")
+        else:
+            if "main" in functionList:
+                functions.append("main")
+            functions += list(
+                filter(
+                    lambda x: x.startswith("solution"),
+                    functionList,
+                )
+            )
+        pass
+
+    def validate(self, test):
+        try:
+            # Functions
+            functionList = self._getFunctionList()
+            if "function" in test:
+                function = test["function"]
+                if function not in functionList:
+                    raise Exception(f"function '{function}' not found.")
+                if isinstance(function, str):
+                    raise TypeError(f"function should be of type string")
+            else:
+                if "main" not in functionList:
+                    if not len(
+                        list(
+                            filter(
+                                lambda x: x.startswith("solution"),
+                                functionList,
+                            )
+                        )
+                    ):
+                        raise Exception(
+                            f"""either create a function with name 
+                        'main' or function starting with 'solution'. or add 
+                        'function' property to the test"""
+                        )
+
+            # Params
+            if "params" in test:
+                params = test["params"]
+                inputParams = None
+                outputParams = None
+
+                def _(data):
+                    for io in data:
+                        if type(io) == "dict":
+                            if "value" not in io:
+                                raise AttributeError("attribute value not found")
+                        else:
+                            # TODO: Named Attributes
+                            pass
+
+                if "input" in params:
+                    ips = _(params["input"])
+                if "output" in params:
+                    ops = _(params["output"])
+            pass
+        except Exception as error:
+            raise Exception(error)
+
+            pass
+
+    def _getTestParams(self, test):
+        # get input and output params and create list of _IOObject
+        inputParams = None
+        outputParams = None
+        if "params" in test:
+            params = test["params"]
+
+            inputParams = (
+                self.createParamObject(params["input"]) if "input" in params else None
+            )
+            outputParams = (
+                self.createParamObject(params["output"]) if "output" in params else None
+            )
+        return inputParams, outputParams
+
+    def createParamObject(self, params):
+        """Creates a list of IOObject containing Input or Output data"""
+        Type = _Type()
+        arr = []
+        try:
+            for io in params:
+                data = io.pop("value")
+                convTypeStr = io.pop("type") if "type" in io else None
+                default = io.pop("default") if "default" in io else None
+                options = io
+
+                if data is None:
+                    arr.append(_IOObject(data, None, default, options))
+                    continue
+
+                convTypeStr, convTypeCls = Type.getConversionType(data, convTypeStr)
+                try:
+                    data = convTypeCls(data)
+                except TypeError as te:
+                    raise TypeError(
+                        "data `{}` cannot be converted to type:`{}`".format(
+                            str(data), convTypeCls
+                        )
+                    )
+                obj = _IOObject(data, convTypeStr, default, options)
+                arr.append(obj)
+            return arr
+        except Exception as e:
+            print(e)
+
+
+####################################################
 #                     I/O OBJECT
 ####################################################
 class _IOObject:
@@ -131,26 +265,31 @@ class _CodeTest(_Options):
 
         # For each test get input and outputs
         for index, test in enumerate(self.tests):
+            test = Test(Problem, test)
             # Get function or list of functions for testing
-            functions = self._getMethodList(Problem, test)
+            # functions = self._getMethodList(Problem, test)
             inputParams, outputParams = self._getTestParams(test)
             description = test.get("description")
 
-            for function in functions:
-                # Run a test on the function
-                sTest = _SingleTest(
-                    Problem,
-                    function,
-                    description,
-                    index,
-                    inputParams,
-                    outputParams,
-                    self.options,
-                )
-                # returns a PASS/FAIL Message
-                messageObj = sTest.run()
-
-                self._printMessage(messageObj)
+            # TODO: pass test object.. also add outputs to test object
+            # for function in functions:
+            #     # Run a test on the function
+            #     sTest = _SingleTest(
+            #         Problem,
+            #         function,
+            #         description,
+            #         index,
+            #         inputParams,
+            #         outputParams,
+            #         self.options,
+            #     )
+            #     # returns a PASS/FAIL Message
+            #     messageObj = sTest.run()
+            #     if messageObj is not None:
+            #         self.messages.append(messageObj)
+        print(self.messages)
+        self._printStrip()
+        # self._printMessages()
 
     def _getMethodList(self, Problem, test):
         """[summary]
@@ -198,17 +337,17 @@ class _CodeTest(_Options):
             )
         return inputParams, outputParams
 
-    def _printMessage(self, messageObj):
-        if messageObj is not None:
-            self.messages.append(messageObj)
+    def _printStrip(self):
+        print("".join([obj["message"] for obj in self.messages]))
+
+    def _printMessages(self):
+        for messageObj in self.messages:
             # if showDetails is True
             if self.SHOW_DETAILS is True:
                 if self.ONLY_FAILED is True and not messageObj["success"]:
                     print(messageObj["message"])
                 if self.ONLY_FAILED is False:
                     print(messageObj["message"])
-        if self.SHOW_DETAILS is False:
-            print("".join([obj["message"] for obj in self.messages]))
 
     def _containerize(self, ios: list) -> list:
         """Creates a list of IOObject containing Input or Output data"""
@@ -407,6 +546,33 @@ class _SingleTest(_Options):
             return self._getMessage(expectedOp, computedOp, totaltime)["failed"]
 
     def _execute(self, *args):
+        pass
+
+
+####################################################
+#                     MESSAGES
+####################################################
+class _TestOutputs:
+    def __init__(self):
+        self.outputs = []
+        pass
+
+    def _addNewTestOutput(self, test: dict):
+
+        pass
+
+    def _printTestOutput(self):
+        pass
+
+    def _printTestOutputString(self):
+        pass
+
+
+class _TestOutput:
+    def __init__(self, cls, functions):
+        pass
+
+    def setOutput(self, output):
         pass
 
 
